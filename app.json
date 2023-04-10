@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Salah",
+    "slug": "Salah",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./app/assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./app/assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#003399"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/logo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "../app/assets/logo.png"
+    }
+  }
+}
