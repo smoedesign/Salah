@@ -5,9 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/logo.png",
+    "androidNavigationBar":{
+      "visible":"sticky-immersive"
+    },
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./app/assets/logo.png",
+      "image": "./app/assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#003399"
     },
@@ -22,7 +25,9 @@
         "foregroundImage": "./app/assets/logo.png",
         "backgroundColor": "#ffffff"
       }
+     
     },
+    
     "web": {
       "favicon": "../app/assets/logo.png"
     }
