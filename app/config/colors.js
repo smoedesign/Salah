@@ -3,5 +3,6 @@ export default {
     secoundery:'#003399',
     white:'#ffffff',
     blue:'#0e387c',
-    lightGray:'#efefef'
+    lightGray:'#efefef',
+    babyBlue:'#a1bef7'
 }

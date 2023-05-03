@@ -1,4 +1,4 @@
-import { useEffect, useState,useRef } from 'react';
+import {  useState,useRef } from 'react';
 import { View,StyleSheet,Text,Modal,Pressable} from 'react-native';
 import Counter from './Counter';
 import AppText from './AppText';
@@ -11,14 +11,6 @@ import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 import { Image } from 'react-native';
 
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-  renderers,
-} from 'react-native-popup-menu';
-const { Popover } = renderers
 
 
 
@@ -78,63 +70,18 @@ function ListItem({descriptin,refrence,times, number}) {
 {refrence && <AppText style={styles.refrence} >{refrence}</AppText>
 }</View>
 <View style={styles.sperator}>
-        <AppText style={styles.times}>{times}</AppText>
-        <Counter number={number} style={styles.number}/>
-        <Menu renderer={Popover} rendererProps={{ preferredPlacement: 'bottom' }}>
-    <MenuTrigger style={styles.menuTrigger} >
-    <MaterialCommunityIcons name='dots-horizontal' color={colors.white} size={30} />
-    </MenuTrigger>
-    <MenuOptions  style={styles.popupView}>
-    <MenuOption onSelect={() => setModalVisible(true)} style={[styles.button,{color:'white'}]}>
-      <Text style={{color:'white',fontSize:15,fontWeight:'bold'}}> حفظ/مشاركة</Text>
-    </MenuOption>
-    <MenuOption onSelect={copy} style={[styles.button,{color:'white'}]}>
-      <Text style={{color:'white',fontSize:15,fontWeight:'bold'}}> نسخ</Text>
-    </MenuOption>
-
-    </MenuOptions>
-  </Menu>
- {modalVisible   &&  <Modal
-       animationType="slide"
-       transparent={false}
-       visible={modalVisible}
-       onRequestClose={() => {
-         setModalVisible(!modalVisible);
-        }}>
-  <View style={styles.modalView}>
-    <MaterialCommunityIcons name='close-circle' color={colors.white} size={35} onPress={()=> setModalVisible(false)} style={styles.icon}/>
-    <Text style={styles.content}>
-    <Text style={styles.textcontent}>{descriptin}  </Text>
-{  refrence &&  <Text style={styles.textRefrenc}>{refrence}  </Text>
-}    </Text>
-    <View style={styles.buttonContainer}>
-    <AppButton onPress={share} title='مشاركة' style={styles.button}/>
-    <AppButton onPress={SaveImage} title='حفظ' style={styles.button}/>
-    </View>
+  <View style={[styles.views,styles.First]}>
+  <AppText style={styles.times}>{times}</AppText>
 
   </View>
-  </Modal>}
+  <View style={[styles.views,styles.secound]}>
 
-  {ImageVisable  && 
- <Modal
- animationType="fade"
- transparent={false}
- visible={ImageVisable}
- translucent={true} 
->
+        <Counter number={number} style={styles.number}/>
+  </View>
+  <View style={[styles.views,styles.third]}>
 
-    <View ref={viewToSnapRef} style={styles.container}>
-                <Image source={require('../assets/white.png')} style={styles.logo}  />
-                <Text style={styles.view}>
-    <Text style={styles.textcontent}>{descriptin} </Text>
-  
-{   refrence && <Text style={styles.textRefrenc}>{refrence} </Text>
-}    </Text>
-    
-    </View>
-    </Modal>
- }
-
+       <ShareImage descriptin={descriptin} refrence={refrence}/>
+  </View>
           </View>
     
         </View>
@@ -143,14 +90,37 @@ function ListItem({descriptin,refrence,times, number}) {
 }
 
 const styles = StyleSheet.create({
+  views:{
+flex:1,
+height:50,
+  },
+  First:{
+
+  
+justifyContent:'center',
+alignItems:'flex-end',
+
+  },
+  secound:{
+  alignItems:'center',
+  justifyContent:'center',
+
+
+
+  },
+  third:{
+    justifyContent:'center',
+    alignItems:'flex-start',
+ 
+
+  },
   number:{
-    color:colors.primary
+    color:colors.primary,
   },
 container:{  
-  justifyContent:'center',
   alignItems:'center',
 marginBottom:10,
-
+justifyContent:'center'
 },
 refrence:{
   fontSize:13,
@@ -176,42 +146,11 @@ sperator:{
   backgroundColor:colors.secoundery,
   width:'100%',
   flexDirection:'row-reverse',
-  paddingHorizontal:17,
-  paddingVertical:9,
-  justifyContent:'space-between',
   alignItems:'center',
-  borderRadius:10,
+  borderRadius:2,
 },
-modalView:{
-  flex:1,
-  justifyContent:'space-between',
-  alignItems:'center',
-  padding:20,
-  paddingHorizontal:20,
-  backgroundColor:colors.primary,
-  marginTop:50,
-  borderRadius:20,
-          },
-          textRefrenc:{
-            fontSize:13,
-            marginTop:20
-          },
-          popupView:{
-            backgroundColor:colors.white,
-            height:180,
-            width:180,
-            justifyContent:'space-between',
-            padding:20,
-            borderRadius:20,
-      position:'absolute',
-      alignSelf:'flex-end',
-      top:0,
-  left:-20,
-  elevation :5,
-  zIndex:1000,
-  
-  
-  },
+
+         
           icon:{
             alignSelf:'flex-start',
           left:-7,
