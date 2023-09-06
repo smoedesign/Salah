@@ -39,7 +39,6 @@ function NamesOfAllah(props) {
     <ImageBackground
       source={require("../assets/babyBlue.jpg")}
       style={styles.container}>
-      <Header title="أسماء الله الحسني" />
       <FlatList
         showsVerticalScrollIndicator={false}
         style={styles.list}
