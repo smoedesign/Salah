@@ -1,38 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, ImageBackground, StatusBar } from "react-native";
 import Screen from "../components/Screen";
 import Header from "../components/Header";
 import { FlatList } from "react-native";
 import ListItem from "../components/ListItems";
 import ShareImage from "../components/ShareImage";
-
-Names = [
-  {
-    id: 1,
-    name: "الله",
-    description:
-      "اسم الذات المختص به جل شأنه، لا يتسمى به غيره، فهو علم على المعبود بحق، الذي تعنو له السموات والأرض وما بينها، ونحن نرفض إطلاق أي اسم على الذات الأقدس غير لفظ “الله” وحده هو العلم الحقيقي.",
-  },
-  {
-    id: 2,
-    name: "القدوس",
-    description:
-      "لمطهر من كل عيب، المنزه عن كل نقص، ومحور التسبيح يدور على هذا المعنى، سبحانه وتعالى",
-  },
-  {
-    id: 3,
-    name: "الوهاب",
-    description:
-      "صاحب العطايا الجزيلة، تفضلاً منه على من شاء “وأن الفضل بيد الله يؤتيه من يشاء والله واسع علي    ",
-  },
-  {
-    id: 4,
-    name: "الحليم",
-    description: `غير أن قد يطول لطفه، ويرجى صفحه. أما الصبور فينبغي القلق من إمهاله!    ويمكن أن يطالع القارئ في شرح الأسماء الحسنى بتوسع وبصيرة كتاب أبى حامد الغزالي “المقصد الأسنى” ففيه إن شاء الله ما ينفع`,
-  },
-];
+import clients from "../../sanity";
 
 function NamesOfAllah(props) {
+  const [names, setNames] = useState([]);
+
+  useEffect(() => {
+    clients
+      .fetch(
+        `*[_type == "namesofallah"] | order(indexid asc)
+        {
+          indexid,
+            name,
+            description,
+            _id
+        }`
+      )
+      .then((data) => {
+        setNames(data);
+      });
+  }, []);
+
   <StatusBar translucent backgroundColor="transparent" />;
 
   return (
@@ -40,10 +33,13 @@ function NamesOfAllah(props) {
       source={require("../assets/babyBlue.jpg")}
       style={styles.container}>
       <FlatList
+        initialNumToRender={50}
+        updateCellsBatchingPeriod={50}
+        shouldComponentUpdate={false}
         showsVerticalScrollIndicator={false}
         style={styles.list}
-        keyExtractor={(item) => item.id.toString()}
-        data={Names}
+        keyExtractor={(item) => item._id}
+        data={names}
         renderItem={({ item }) => (
           <ListItem descriptin={item.name} refrence={item.description} />
         )}

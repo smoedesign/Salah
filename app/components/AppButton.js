@@ -1,15 +1,22 @@
 import React from "react";
-import { Text, StyleSheet, TouchableHighlight } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  TouchableHighlight,
+  disabled,
+  Pressable,
+} from "react-native";
 import colors from "../config/colors";
 
 function AppButton({ style, title, onPress, color = "white" }) {
   return (
-    <TouchableHighlight
+    <Pressable
+      disabled={disabled}
       onPress={onPress}
       style={[styles.button, style]}
       underlayColor={colors.blue}>
       <Text style={[styles.text, { color: color }]}> {title}</Text>
-    </TouchableHighlight>
+    </Pressable>
   );
 }
 

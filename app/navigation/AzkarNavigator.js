@@ -15,7 +15,7 @@ const AzkarNavigator = () => (
     <Stack.Screen
       name="AzkarDetailsScreen"
       component={AzkarDetailsScreen}
-      options={({ route }) => ({ title: route.params.title })}
+      options={({ route }) => ({ title: route.params.name })}
     />
   </Stack.Navigator>
 );

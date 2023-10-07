@@ -6,6 +6,11 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'indexid',
+      title: 'index Id',
+      type: 'number',
+    }),
+    defineField({
       name: 'category',
       title: 'Category',
       type: 'reference',

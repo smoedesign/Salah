@@ -1,41 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import ListItem from "../components/ListItems";
 import { Share } from "react-native";
 import ShareImage from "../components/ShareImage";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
-import Header from "../components/Header";
+import clients from "../../sanity";
 import { ImageBackground } from "react-native";
 import AppText from "../components/AppText";
+import Toast from "react-native-root-toast";
 
 function FortyNawawiDetailsScreen({ route, navigation }) {
+  const [nextItem, setNextItems] = useState([]);
   const forty = route.params;
+
+  useEffect(() => {
+    clients
+      .fetch(
+        `
+        *[_type=="fortyNawawi" ] | order(indexid){
+          ...
+        } [$indexid+1]       
+        `,
+        { indexid: forty.indexid }
+      )
+      .then((data) => {
+        setNextItems(data);
+      });
+  }, []);
 
   return (
     <ImageBackground
       style={{ flex: 1, padding: 10 }}
       source={require("../assets/babyBlue.jpg")}>
       <View style={styles.container}>
-        <ListItem descriptin={forty.description} refrence={forty.refrence} />
+        <ListItem descriptin={forty.description} refrence={forty.reference} />
         <View style={styles.buttonContainer}>
-          <AppButton
-            onPress={() =>
-              navigation.navigate({
-                name: "FortyNawawiDetailsScreen",
-                title: forty.title,
-                params: {
-                  route: forty.id + 1,
-                },
-              })
-            }
-            title="التالي"
-            style={styles.button}
-          />
+          {forty.indexid == 42 ? (
+            <AppButton
+              onPress={() => {
+                Toast.show("you reached the end of the Forty Nawawia", {
+                  duration: Toast.durations.LONG,
+                  position: Toast.positions.CENTER,
+                  shadow: true,
+                  animation: true,
+                  hideOnPress: true,
+                  delay: 30,
+                });
+                navigation.popToTop();
+              }}
+              title="التالي"
+              style={styles.button}
+            />
+          ) : (
+            <AppButton
+              onPress={() =>
+                navigation.push("FortyNawawiDetailsScreen", nextItem)
+              }
+              title="التالي"
+              style={styles.button}
+            />
+          )}
+
           <ShareImage
             shareComponent={"مشاركة"}
             descriptin={forty.description}
-            refrence={forty.refrence}
+            refrence={forty.reference}
           />
           <AppButton
             onPress={() => {

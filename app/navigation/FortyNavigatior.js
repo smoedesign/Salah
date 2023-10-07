@@ -17,7 +17,7 @@ const FortyNawawiNavigator = () => (
     <Stack.Screen
       name="FortyNawawiDetailsScreen"
       component={FortyNawawiDetailsScreen}
-      options={({ route }) => ({ title: route.params.title })}
+      options={({ route }) => ({ title: route.params.nameofhadith })}
     />
   </Stack.Navigator>
 );

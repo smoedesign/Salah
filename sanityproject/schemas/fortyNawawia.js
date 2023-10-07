@@ -6,17 +6,21 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'numberofhadith',
-      title: 'Hadith Number',
-      type: 'reference',
-      to: [{type: 'numberofhadith'}],
+      name: 'indexid',
+      title: 'index Id',
+      type: 'number',
     }),
     defineField({
-      name: 'namesofhadith',
-      title: 'Hadith Name',
-      type: 'reference',
-      to: [{type: 'namesofhadith'}],
+      name: 'numbersofhadith',
+      title: 'Hadith Number',
+      type: 'string',
     }),
+    defineField({
+      name: 'nameofhadith',
+      title: 'Hadith Names',
+      type: 'string',
+    }),
+
     defineField({
       name: 'description',
       title: 'Hadith Description',

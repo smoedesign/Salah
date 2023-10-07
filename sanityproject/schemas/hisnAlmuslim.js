@@ -6,10 +6,20 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      id: 'id',
+      name: 'indexid',
+      title: 'index Id',
+      type: 'number',
+    }),
+    defineField({
       name: 'name',
       title: 'Name',
       type: 'string',
+    }),
+    defineField({
+      name: 'alazkar',
+      title: 'Al azkar',
+      type: 'array',
+      of:[{type:"reference",to:[{type: "alazkar"}]}]
     }),
   ],
 })

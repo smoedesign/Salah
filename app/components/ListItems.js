@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "red",
   },
   refrence: {
     fontSize: 13,
@@ -61,6 +60,10 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row-reverse",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingLeft: 10,
+    padding: 3,
+    marginTop: 20,
     borderRadius: 2,
   },
 
