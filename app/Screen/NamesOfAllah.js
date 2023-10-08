@@ -34,9 +34,6 @@ function NamesOfAllah(props) {
       style={styles.container}>
       <FlatList
         initialNumToRender={50}
-        updateCellsBatchingPeriod={50}
-        shouldComponentUpdate={false}
-        showsVerticalScrollIndicator={false}
         style={styles.list}
         keyExtractor={(item) => item._id}
         data={names}
