@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text } from "react-native";
-import { View, StyleSheet } from "react-native";
+import {
+  FlatList,
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
@@ -11,6 +17,7 @@ import clients from "../../sanity";
 
 function AzkarScreen({ navigation }) {
   const [azkar, setAlazkar] = useState([]);
+  const [text, setChangeText] = useState("");
 
   useEffect(() => {
     clients
@@ -27,23 +34,62 @@ function AzkarScreen({ navigation }) {
       });
   }, []);
 
+  const filterData = (item) => {
+    const Searchitem = text;
+    const name = item.name;
+    const b = "\u0627"; //ا
+    const a = "\u0625"; //أ
+    if (Searchitem == "") {
+      return (
+        <AppButton
+          key={item._id}
+          title={name}
+          style={styles.azkarContainer}
+          onPress={() => {
+            navigation.navigate("AzkarDetailsScreen", item);
+          }}
+        />
+      );
+    }
+
+    if (name.includes(Searchitem)) {
+      
+      return (
+        <AppButton
+          key={item._id}
+          title={name}
+          style={styles.azkarContainer}
+          onPress={() => {
+            navigation.navigate("AzkarDetailsScreen", item);
+          }}
+        />
+      );
+    }
+  };
+
   return (
     <Screen style={styles.container}>
-      <Search title="أبحث" />
-
+      <TouchableWithoutFeedback>
+        <View style={styles.searchContainer}>
+          <TextInput
+            editable
+            value={text}
+            style={styles.input}
+            onChangeText={(text) => setChangeText(text.toString())}
+            clearTextOnFocus
+            keyboardType="default"
+          />
+          <AppButton
+            style={styles.title}
+            onPress={(text) => setChangeText(text)}
+            title={"ابحث"}
+          />
+        </View>
+      </TouchableWithoutFeedback>
       <FlatList
         data={azkar}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <AppButton
-            key={item._id}
-            title={item.name}
-            style={styles.azkarContainer}
-            onPress={() => {
-              navigation.navigate("AzkarDetailsScreen", item);
-            }}
-          />
-        )}
+        renderItem={({ item }) => filterData(item)}
       />
     </Screen>
   );
@@ -66,5 +112,35 @@ const styles = StyleSheet.create({
   morningContainer: {
     marginBottom: 25,
   },
+  searchContainer: {
+    width: "100%",
+    height: 50,
+    marginVertical: 20,
+    justifyContent: "flex-end",
+    flexDirection: "row-reverse",
+    borderRadius: 4,
+    overflow: "hidden",
+    backgroundColor: colors.primary,
+  },
+  input: {
+    backgroundColor: colors.primary,
+    flexGrow: 1,
+    height: "100%",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    color: colors.white,
+    fontSize: 18,
+    writingDirection: "rtl",
+  },
+  title: {
+    fontSize: 18,
+    color: colors.white,
+    backgroundColor: colors.secoundery,
+    width: 80,
+    height: "100%",
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
 });
+
 export default AzkarScreen;
