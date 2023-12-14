@@ -8,13 +8,21 @@ import {
 } from "react-native";
 import colors from "../config/colors";
 
-function AppButton({ style, title, onPress, color = "white" }) {
+function AppButton({
+  number,
+  style,
+  title,
+  onPress,
+  numberStyle,
+  color = "white",
+}) {
   return (
     <Pressable
       disabled={disabled}
       onPress={onPress}
       style={[styles.button, style]}
       underlayColor={colors.blue}>
+      {number && <Text style={numberStyle}>{number}</Text>}
       <Text style={[styles.text, { color: color }]}> {title}</Text>
     </Pressable>
   );
@@ -27,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",

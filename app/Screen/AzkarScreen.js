@@ -33,12 +33,20 @@ function AzkarScreen({ navigation }) {
         setAlazkar(data);
       });
   }, []);
+  const searchArabic=(item)=>{
+    const b = "\u0627"; //ا
+    const a = "\u0625"; //أ
+azkar.filter((word)=> {if(word.includes(b) || word.includes(a)) 
+
+return word
+})
+
+  }
 
   const filterData = (item) => {
     const Searchitem = text;
     const name = item.name;
-    const b = "\u0627"; //ا
-    const a = "\u0625"; //أ
+    
     if (Searchitem == "") {
       return (
         <AppButton

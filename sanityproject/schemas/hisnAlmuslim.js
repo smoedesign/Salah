@@ -19,7 +19,7 @@ export default defineType({
       name: 'alazkar',
       title: 'Al azkar',
       type: 'array',
-      of:[{type:"reference",to:[{type: "alazkar"}]}]
+      of: [{type: 'reference', to: [{type: 'alazkar'}]}],
     }),
   ],
 })

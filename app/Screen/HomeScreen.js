@@ -20,7 +20,11 @@ function HomeScreen({ navigation }) {
           />
           <Search title="أبحث" />
           <View style={styles.buttonContaıner}>
-            <AppButton title="القران الكريم" style={styles.button} />
+            <AppButton
+              title="القران الكريم"
+              style={styles.button}
+              onPress={() => navigation.navigate("QuranScreen")}
+            />
             <AppButton
               title="الاذكار"
               style={styles.button}

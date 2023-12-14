@@ -11,6 +11,7 @@ import MenuNavigator from "./MenuNavigator";
 import Header from "../components/Header";
 import AzkarNavigator from "./AzkarNavigator";
 import FortyNawawiNavigator from "./FortyNavigatior";
+import QuranNavigatior from "./QuranNavigatior";
 const Stack = createNativeStackNavigator();
 
 const HomeNavigator = () => (
@@ -28,6 +29,16 @@ const HomeNavigator = () => (
       component={NamesOfAllah}
       options={{
         title: "أسماء الله الحسني",
+      }}
+    />
+
+    <Stack.Screen
+      name="QuranScreen"
+      component={QuranNavigatior}
+      options={{
+        headerShown: false,
+
+        title: "القران الكريم",
       }}
     />
 
