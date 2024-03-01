@@ -1,27 +1,13 @@
 import React, { useState } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { Text, StyleSheet, View, TextInput, Pressable } from "react-native";
 import colors from "../config/colors";
 import AppButton from "./AppButton";
 
-function Search({ title }) {
-  const [text, onChangeText] = useState();
+function Search({ title, editable, onPress, inputText }) {
+  const [text, onChangeText] = useState([]);
   return (
-    <TouchableWithoutFeedback>
+    <Pressable onPress={onPress}>
       <View style={styles.container}>
-        <TextInput
-          editable
-          value={text}
-          style={styles.input}
-          onChangeText={onChangeText}
-          clearTextOnFocus
-          keyboardType="default"
-        />
         <AppButton
           style={styles.title}
           onPress={(text) => {
@@ -31,15 +17,24 @@ function Search({ title }) {
           }}
           title={title}
         />
+        <TextInput
+          inputMode="text"
+          textAlign="right"
+          editable={editable}
+          value={inputText}
+          style={styles.input}
+          onChangeText={onChangeText}
+          clearTextOnFocus
+        />
       </View>
-    </TouchableWithoutFeedback>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: 50,
+    height: 60,
     marginVertical: 20,
     justifyContent: "flex-end",
     flexDirection: "row",

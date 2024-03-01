@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -9,6 +9,7 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import AppText from "../components/AppText";
 import ErrorMessages from "../components/ErrorMessages";
+import { sendEmail } from "../utility/sendEmail";
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string().required().label("Name"),
@@ -16,40 +17,58 @@ const validationSchema = Yup.object().shape({
   messages: Yup.string().required().label("Message"),
 });
 
-function FeedbackScreens(props) {
+function FeedbackScreens() {
   return (
     <View style={styles.container}>
-      <Header title={"feedback"} />
       <Formik
         style={styles.form}
         initialValues={{ email: "", userName: "", messages: "" }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={async (values, { resetForm }) => {
+          Keyboard.dismiss();
+          const result = await sendEmail(values);
+          resetForm();
+        }}
         validationSchema={validationSchema}>
-        {({ handleChange, handleSubmit, errors }) => (
+        {({
+          handleSubmit,
+          errors,
+          setFieldTouched,
+          touched,
+          setFieldValue,
+          values,
+        }) => (
           <>
             <AppTextInput
-              placeholder="Name"
-              onChangeText={handleChange("userName")}
+              placeholder="الاسم"
+              autoCorrect={false}
+              onChangeText={(text) => setFieldValue("userName", text)}
+              value={values.userName}
+              icon={"account"}
+              onBlur={() => setFieldTouched("userName")}
             />
-            <ErrorMessages error={errors.userName} />
+            <ErrorMessages error={errors.userName} visible={touched.userName} />
             <AppTextInput
-              placeholder="Email"
+              placeholder="البريد الالكتروني"
               keyboardType={"email-address"}
               textContentType="emailAddress"
               autoCapitalize="none"
-              onChangeText={handleChange("email")}
+              icon={"email"}
+              onChangeText={(text) => setFieldValue("email", text)}
+              value={values.email}
             />
-            <ErrorMessages error={errors.email} />
-
             <AppTextInput
-              placeholder="Message"
-              multiline
-              onChangeText={handleChange("messages")}
+              placeholder="الرسالة"
+              numberOfLines={15}
+              multiline={true}
+              onChangeText={(text) => setFieldValue("messages", text)}
+              value={values.messages}
+              style={{ minHeight: 150 }}
+              icon={"message"}
+              onBlur={() => setFieldTouched("messages")}
             />
-            <ErrorMessages error={errors.messages} />
-
+            <ErrorMessages error={errors.messages} visible={touched.messages} />
             <AppButton
-              title={"Send"}
+              title={"أرسال"}
               onPress={handleSubmit}
               style={styles.button}
               color={colors.white}
@@ -64,21 +83,24 @@ function FeedbackScreens(props) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+
     backgroundColor: colors.white,
     flex: 1,
+    paddingTop: 20,
+    alignItems: "center",
   },
   button: {
     padding: 10,
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 10,
-    borderRadius: 25,
-    width: "100%",
+    borderRadius: 5,
+    width: "40%",
     backgroundColor: colors.primary,
   },
   form: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 100,
+    marginTop: 200,
   },
 });
 export default FeedbackScreens;

@@ -1,17 +1,22 @@
 {
   "expo": {
-    "name": "Salah",
-    "slug": "Salah",
+    "name": "salah",
+    "slug": "salah",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/logo.png",
     "androidNavigationBar": {
       "visible": "sticky-immersive"
     },
+    "notificationsPermission": "Allow $(PRODUCT_NAME) to Send notifications.",
+    "notifications": {
+      "iosDisplayInForeground": true
+    },
+    "permissions": ["SCHEDULE_EXACT_ALARM"],
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./app/assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#003399"
     },
     "assetBundlePatterns": ["**/*"],
@@ -26,6 +31,12 @@
     },
     "web": {
       "favicon": "../app/assets/logo.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "11464412-8b33-4a2c-897e-929f3d2bf986"
+      }
+    },
+    "owner": "smoedesign"
   }
 }

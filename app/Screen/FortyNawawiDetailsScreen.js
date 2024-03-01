@@ -1,31 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 import ListItem from "../components/ListItems";
-import { Share } from "react-native";
 import ShareImage from "../components/ShareImage";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
-import clients from "../../sanity";
 import { ImageBackground } from "react-native";
-import AppText from "../components/AppText";
 import Toast from "react-native-root-toast";
+import * as SQLite from "expo-sqlite";
+
+const db = SQLite.openDatabase("salahApp.db");
 
 function FortyNawawiDetailsScreen({ route, navigation }) {
-  const [nextItem, setNextItems] = useState([]);
   const forty = route.params;
 
+  const [nextItem, setNextItem] = useState([]);
+
   useEffect(() => {
-    clients
-      .fetch(
-        `
-        *[_type=="fortyNawawi" ] | order(indexid){
-          ...
-        }       
-        `
-      )
-      .then((data) => {
-        setNextItems(data);
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM fortyNawawia;`, null, (_, result) => {
+          setNextItem(result.rows._array);
+        });
       });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (
@@ -33,28 +32,32 @@ function FortyNawawiDetailsScreen({ route, navigation }) {
       style={{ flex: 1, padding: 10 }}
       source={require("../assets/babyBlue.jpg")}>
       <View style={styles.container}>
-        <View style={{ height: "70%" }}>
-          <ListItem descriptin={forty.description} refrence={forty.reference} />
+        <View style={{ height: "auto" }}>
+          <ListItem
+            descriptin={forty.description}
+            refrence={forty.reference}
+            fonts={{ fontSize: 14, marginBottom: 10 }}
+            headers={{ fontSize: 18, fontWeight: "500", paddingVertical: 15 }}
+          />
         </View>
         <View style={styles.buttonContainer}>
           <AppButton
             onPress={() => {
-              nextItem.map((hadith) => {
-                if (
+              const previousHadith = nextItem.find(
+                (hadith) =>
                   hadith.indexid === forty.indexid - 1 &&
-                  forty.indexid > 1 &&
-                  hadith.indexid > 1
-                ) {
-                  navigation.replace("FortyNawawiDetailsScreen", hadith);
-                } else if (hadith.indexid === 1 && forty.indexid === 1) {
-                  navigation.popToTop();
-                } else {
-                  return;
-                }
-              });
+                  forty.indexid > 0 &&
+                  hadith.indexid > 0
+              );
+              if (previousHadith) {
+                navigation.navigate("FortyNawawiDetailsScreen", previousHadith);
+              } else if (forty.indexid === 1) {
+                console.log("disabled");
+              }
             }}
             title={"السابق"}
-            style={styles.button}
+            style={forty.indexid === 1 ? styles.buttonActive : styles.button}
+            disabled={forty.indexid === 1}
           />
 
           <ShareImage
@@ -65,30 +68,27 @@ function FortyNawawiDetailsScreen({ route, navigation }) {
 
           <AppButton
             onPress={() => {
-              nextItem.map((hadith) => {
-                if (
+              const nextHadith = nextItem.find(
+                (hadith) =>
                   hadith.indexid === forty.indexid + 1 &&
                   forty.indexid <= 42 &&
                   hadith.indexid <= 42
-                ) {
-                  navigation.navigate("FortyNawawiDetailsScreen", hadith);
-                } else if (hadith.indexid === 42 && forty.indexid === 42) {
-                  Toast.show("you reached the end of the Forty Nawawia", {
-                    duration: Toast.durations.LONG,
-                    position: Toast.positions.CENTER,
-                    shadow: true,
-                    animation: true,
-                    hideOnPress: true,
-                    delay: 10,
-                  });
-                  navigation.popToTop();
-                } else {
-                  return;
-                }
-              });
+              );
+              if (nextHadith) {
+                navigation.navigate("FortyNawawiDetailsScreen", nextHadith);
+              } else if (forty.indexid === 42) {
+                Toast.show("لقد أكملت الاربعون النووية", {
+                  duration: Toast.durations.LONG,
+                  position: Toast.positions.CENTER,
+                  shadow: true,
+                  animation: true,
+                  hideOnPress: true,
+                  delay: 10,
+                });
+              }
             }}
             title={"التالي"}
-            style={styles.button}
+            style={forty.indexid === 42 ? styles.buttonActive : styles.button}
           />
         </View>
       </View>
@@ -102,13 +102,21 @@ const styles = StyleSheet.create({
 
     alignItems: "center",
   },
+  buttonActive: {
+    backgroundColor: "gray",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   buttonContainer: {
     justifyContent: "space-between",
     flexDirection: "row-reverse",
     alignItems: "center",
     width: "100%",
     display: "flex",
-    marginTop: 20,
+    marginTop: 10,
     paddingHorizontal: 10,
   },
   button: {

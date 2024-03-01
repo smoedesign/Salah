@@ -1,16 +1,7 @@
-import {
-  View,
-  Text,
-  Alert,
-  StyleSheet,
-  Pressable,
-  TouchableOpacity,
-  Modal,
-  ImageBackground,
-} from "react-native";
+import { View, Text, Alert, StyleSheet, Modal } from "react-native";
 import colors from "../config/colors";
 import * as Clipboard from "expo-clipboard";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppButton from "./AppButton";
 import * as Sharing from "expo-sharing";
@@ -28,7 +19,14 @@ import {
 import AppText from "./AppText";
 const { Popover } = renderers;
 
-function ShareImage({ descriptin, refrence, shareComponent }) {
+function ShareImage({
+  descriptin,
+  refrence,
+  shareComponent,
+  header,
+  font,
+  route,
+}) {
   const [ImageVisable, setImageVisiable] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const viewToSnapRef = useRef();
@@ -48,8 +46,12 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
   };
 
   const copy = async () => {
-    Clipboard.setStringAsync(descriptin + "\n" + refrence);
-    Toast.show("Text Copied", {
+    const copiedText = descriptin + "\n" + refrence;
+
+   
+    await Clipboard.setStringAsync(copiedText);
+
+    Toast.show("تم نسخ النص", {
       duration: Toast.durations.LONG,
       position: Toast.positions.CENTER,
       shadow: true,
@@ -62,18 +64,18 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
     const { granted } = await MediaLibrary.requestPermissionsAsync();
     if (!granted) {
       return Alert.alert(
-        "Permission ",
-        "You need to enable permission to save the image"
+        "الاذونات ",
+        "يجب ان تمنح الاذن للبرنامج لتستطيع حفظ الصورة"
       );
     } else {
-      setImageVisiable(true);
+      setImageVisiable(true); // Corrected spelling
       try {
         setTimeout(async () => {
           const result = await captureRef(viewToSnapRef);
 
-          setImageVisiable(false);
+          setImageVisiable(false); // Corrected spelling
           await MediaLibrary.saveToLibraryAsync(result);
-          Toast.show("Image Saved", {
+          Toast.show("تم حفظ الصورة", {
             duration: Toast.durations.LONG,
             position: Toast.positions.TOP,
             shadow: true,
@@ -88,7 +90,6 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
       }
     }
   };
-
   return (
     <>
       <Menu renderer={Popover} rendererProps={{ preferredPlacement: "bottom" }}>
@@ -118,7 +119,7 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
             <MaterialCommunityIcons
               name="dots-horizontal"
               color={colors.white}
-              size={30}
+              size={34}
             />
           )}
         </MenuTrigger>
@@ -135,7 +136,6 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
               },
             ]}>
             <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
-              {" "}
               حفظ/مشاركة
             </Text>
           </MenuOption>
@@ -151,8 +151,7 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
               },
             ]}>
             <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
-              {" "}
-              نسخ
+              {"نسخ "}
             </Text>
           </MenuOption>
         </MenuOptions>
@@ -175,12 +174,10 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
               style={styles.icon}
             />
             <View style={styles.content}>
-              <Text>
-                <Text style={styles.textcontent}>{descriptin} </Text>
-                {refrence && (
-                  <Text style={styles.textRefrenc}>{refrence} </Text>
-                )}{" "}
-              </Text>
+              <Text style={[styles.textcontent, header]}>{descriptin} </Text>
+              {refrence && (
+                <Text style={[styles.textRefrenc, font]}>{refrence} </Text>
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <AppButton onPress={share} title="مشاركة" style={styles.button} />
@@ -198,19 +195,15 @@ function ShareImage({ descriptin, refrence, shareComponent }) {
         <Modal
           animationType="fade"
           transparent={false}
+          presentationStyle={"fullScreen"}
           visible={ImageVisable}
-          translucent={true}>
+          translucent={true}
+          statusBarTranslucent={true}>
           <View ref={viewToSnapRef} style={styles.view}>
-            <ImageBackground
-              source={require("../assets/Screen.jpg")}
-              resizeMode="contain">
-              <Text>
-                <Text style={styles.textcontent}>{descriptin} </Text>
-                {refrence && (
-                  <Text style={styles.textRefrenc}>{refrence} </Text>
-                )}{" "}
-              </Text>
-            </ImageBackground>
+            <Text style={[styles.textcontent, header]}>{descriptin} </Text>
+            {refrence && (
+              <Text style={[styles.textRefrenc, font]}>{refrence}</Text>
+            )}
           </View>
         </Modal>
       )}
@@ -231,13 +224,14 @@ const styles = StyleSheet.create({
   textRefrenc: {
     fontSize: 13,
     marginTop: 20,
+    color: colors.white,
   },
   popupView: {
     backgroundColor: colors.white,
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 20,
-    top: 1,
+    top: -1,
     position: "absolute",
     left: -20,
     elevation: 10,
@@ -254,13 +248,13 @@ const styles = StyleSheet.create({
   },
   content: {
     width: "100%",
-    height: "75%",
+    height: "73%",
     justifyContent: "center",
     alignItems: "center",
     textAlign: "center",
     borderRadius: 20,
     backgroundColor: colors.blue,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
   },
 
   view: {
@@ -273,6 +267,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
+    display: "flex",
+    flexDirection: "column",
+    paddingHorizontal: 20,
   },
   button: {
     backgroundColor: colors.blue,
@@ -298,66 +295,3 @@ const styles = StyleSheet.create({
   },
 });
 export default ShareImage;
-
-/*
-
-
-  <View style={styles.dot}>
-      <TouchableOpacity onPress={()=> SetPopupVisible(!popupVisible)}>
-  <MaterialCommunityIcons name='dots-horizontal' color={colors.white} size={30} />
-  </TouchableOpacity>
- 
- {popupVisible && 
-  <View  style={styles.popupView} >
-
-   <AppButton onPress={()=>{setModalVisible(true) 
-   SetPopupVisible(false)
-   }} title='حفظ/مشاركة' style={styles.button}/>
-   <AppButton onPress={copy} title='نسخ' style={styles.button}/>
-  
-   </View>}
-
-   </View>
- {ImageVisable  && 
- <Modal
- animationType="fade"
- transparent={false}
- visible={ImageVisable}
- translucent={true} 
->
-
-    <View ref={viewToSnapRef} style={styles.container}>
-                <Image source={require('../assets/white.png')} style={styles.logo}  />
-                <View style={styles.view}>
-    <Text style={styles.textcontent}>{descriptin} </Text>
-  
-{   refrence && <Text style={styles.textRefrenc}>{refrence} </Text>
-}    </View>
-    
-    </View>
-    </Modal>
- }
-
-
-     <Modal
-       animationType="slide"
-       transparent={false}
-       visible={modalVisible}
-       onRequestClose={() => {
-         setModalVisible(!modalVisible);
-        }}>
-  <View style={styles.modalView}>
-    <MaterialCommunityIcons name='close-circle' color={colors.white} size={35} onPress={()=> setModalVisible(false)} style={styles.icon}/>
-    <View style={styles.content}>
-    <Text style={styles.textcontent}>{descriptin}  </Text>
-{  refrence &&  <Text style={styles.textRefrenc}>{refrence}  </Text>
-}    </View>
-    <View style={styles.buttonContainer}>
-    <AppButton onPress={share} title='مشاركة' style={styles.button}/>
-    <AppButton onPress={SaveImage} title='حفظ' style={styles.button}/>
-    </View>
-
-  </View>
-  </Modal>
- 
-*/

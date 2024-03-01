@@ -1,34 +1,27 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet, Pressable, TextInput } from "react-native";
-import Screen from "../components/Screen";
-import Header from "../components/Header";
 import AppText from "../components/AppText";
 import AppPicker from "../components/AppPicker";
 import colors from "../config/colors";
 import Toast from "react-native-root-toast";
-import SibhaHistory from "../components/SibhaHistory";
 
 function SibhaScreen(props) {
   const azkar = [
-    { label: "سبحان الله", id: 1, lastTime: 0, allTime: 0 },
-    { label: "الحمد الله", id: 2, lastTime: 0, allTime: 0 },
-    { label: "لا اله الا الله", id: 3, lastTime: 0, allTime: 0 },
-    { label: " استغفر الله العظيم", id: 5, lastTime: 0, allTime: 0 },
-    { label: "لا حول ولا قوة الا بالله", id: 4, lastTime: 0, allTime: 0 },
-    { label: " الله اكبر", id: 6, lastTime: 0, allTime: 0 },
+    { label: "سبحان الله", id: 1 },
+    { label: "الحمد الله", id: 2 },
+    { label: "لا اله الا الله", id: 3 },
+    { label: " الله اكبر", id: 6 },
+    { label: " سبحان الله وبحمده", id: 8 },
+    { label: " سبحان الله العظيم", id: 9 },
+    { label: "لا حول ولا قوة الا بالله", id: 4 },
+    { label: " استغفر الله العظيم واتوب اليه", id: 5 },
+    { label: " اللهم صلي وسلم علي نبينا محمد", id: 7 },
   ];
 
   const [ziker, setZiker] = useState();
   const [timesPressed, setTimesPressed] = useState(0);
-  const [history, setHistory] = useState(azkar);
-  const [Count, setCount] = useState("");
+  const [Count, setCount] = useState(null);
   const [SelectedItem, setSelectedItem] = useState("");
-
-  useEffect(() => {
-    history.filter((item) => {
-      if (item.id === SelectedItem) item.lastTime = timesPressed;
-    });
-  }, [timesPressed]);
 
   const handleReset = () => {
     setTimesPressed(0);
@@ -37,7 +30,7 @@ function SibhaScreen(props) {
 
   const handlePress = () => {
     if (timesPressed === 10000) {
-      Toast.show("You Reached 10.000", {
+      Toast.show("لقد وصلت الي 10.000 عدد ", {
         duration: Toast.durations.LONG,
         position: Toast.positions.CENTER,
         shadow: true,
@@ -46,52 +39,31 @@ function SibhaScreen(props) {
       });
       setTimesPressed(0);
       textLog = 0;
-    } else {
-      if (!ziker || !Count) {
-        Toast.show("  من فضلك أختر ذكراً وعددا ", {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.CENTER,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          backgroundColor: colors.primary,
-        });
-      } else {
-        if (timesPressed == Count) {
-          Toast.show("لقد أكملت الورد", {
-            duration: Toast.durations.LONG,
-            position: Toast.positions.CENTER,
-            shadow: true,
-            animation: true,
-            hideOnPress: true,
-            backgroundColor: colors.primary,
-          });
-        } else {
-          setTimesPressed(timesPressed + 1);
-          history.filter((item) => {
-            if (item.id === SelectedItem) item.allTime = item.allTime + 1;
-          });
-        }
-      }
+    } else if (timesPressed != 0 && timesPressed == Count) {
+      Toast.show("لقد أكملت الورد", {
+        duration: Toast.durations.LONG,
+        position: Toast.positions.CENTER,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        backgroundColor: colors.primary,
+      });
+      setTimesPressed(0);
+      setCount(0);
+      textLog = 0;
+    } else if (!Count || !ziker) {
+      setTimesPressed(timesPressed + 1);
     }
-  };
-
-  const onPressItem = (item) => {
-    history.map((H, i) => {
-      if (H.id === item.id) setSelectedItem(item.id);
-    });
   };
 
   return (
     <>
       <View style={styles.container}>
-        <Header title="السبحة" />
         <View style={styles.content}>
           <AppPicker
             SelectedZiker={ziker}
             onSelectZiker={(item) => {
               setZiker(item);
-              onPressItem(item);
               setTimesPressed(0);
             }}
             items={azkar}
@@ -101,7 +73,7 @@ function SibhaScreen(props) {
           <View style={styles.ViewCount}>
             <AppText
               style={
-                timesPressed < 1000
+                timesPressed < 10000
                   ? styles.textStyle
                   : [styles.textStyle, { fontSize: 50 }]
               }>
@@ -117,7 +89,7 @@ function SibhaScreen(props) {
                   fontWeight: "700",
                   marginRight: 5,
                 }}>
-                Reset
+                {"تصفير العداد"}
               </AppText>
             </Pressable>
             <Pressable onPress={handlePress} style={styles.border}>
@@ -126,13 +98,19 @@ function SibhaScreen(props) {
 
             <View style={styles.countInput}>
               <AppText style={{ color: colors.secoundery, fontWeight: "700" }}>
-                Count:
+                {"العدد:"}
               </AppText>
               <TextInput
                 keyboardType="number-pad"
                 placeholder="0"
                 value={Count}
-                style={{ paddingLeft: 5, color: colors.secoundery, width: 60 }}
+                style={{
+                  fontSize: 15,
+                  fontWeight: "700",
+                  color: colors.secoundery,
+                  backgroundColor: colors.babyBlue,
+                  width: 60,
+                }}
                 onChangeText={(newText) => setCount(newText)}
               />
             </View>
@@ -162,17 +140,17 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   countInput: {
-    flexDirection: "row",
+    flexDirection: "row-reverse",
     width: 60,
   },
   container: {
     alignItems: "center",
-    padding: 20,
+    paddingHorizontal: 20,
     width: "100%",
     flex: 1,
   },
   content: {
-    marginVertical: 40,
+    marginVertical: 20,
     justifyContent: "space-between",
     alignItems: "center",
     flex: 1,
@@ -217,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
-    flexDirection: "row-reverse",
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",

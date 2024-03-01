@@ -5,25 +5,33 @@ import Header from "../components/Header";
 import colors from "../config/colors";
 import AppText from "../components/AppText";
 import clients from "../../sanity";
+import useApi from "../hooks/useApi";
+import nawawiaApi from "../api/nawawia";
+import * as SQLite from "expo-sqlite";
+import { FlashList } from "@shopify/flash-list";
+
+const db = SQLite.openDatabase("salahApp.db");
 
 function FortyNawawi({ navigation }) {
   const [forty, setForty] = useState([]);
 
   useEffect(() => {
-    clients
-      .fetch(
-        `
-        *[_type=="fortyNawawi"] | order(indexid)`
-      )
-      .then((data) => {
-        setForty(data);
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM fortyNawawia;`, null, (_, result) => {
+          setForty(result.rows._array);
+        });
       });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
+
+  /*fortyNawawia*/
 
   return (
     <View style={styles.container}>
-      <FlatList
-        style={styles.list}
+      <FlashList
         data={forty}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
@@ -36,6 +44,7 @@ function FortyNawawi({ navigation }) {
             <AppText style={styles.name}>{item.nameofhadith}</AppText>
           </TouchableOpacity>
         )}
+        estimatedItemSize={200}
       />
     </View>
   );
@@ -44,6 +53,8 @@ function FortyNawawi({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    height: "100%",
+    paddingVertical: 25,
   },
   item: {
     paddingVertical: 5,

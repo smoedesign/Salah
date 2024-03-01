@@ -1,82 +1,83 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, Platform } from "react-native";
 
 import Screen from "../components/Screen";
 import colors from "../config/colors";
 import Header from "../components/Header";
 import AppButton from "../components/AppButton";
 import Search from "../components/Search";
+import { Dimensions } from "react-native";
+import * as Notifications from "expo-notifications";
+import RootNavigation from "../navigation/RootNavigation";
+
+const { height } = Dimensions.get("window");
 
 function HomeScreen({ navigation }) {
   return (
     <>
-      <ScrollView style={styles.container}>
-        <View style={styles.content}>
+      <View style={styles.content}>
+        <AppButton style={styles.duaaButton} />
+
+        <Search
+          title="أبحث"
+          editable={false}
+          onPress={() => navigation.navigate("SearchScreen")}
+        />
+        <View style={styles.buttonContaıner}>
           <AppButton
-            style={styles.duaaButton}
             title="أسماء الله الحسني"
             onPress={() => navigation.navigate("NamesOfAllah")}
+            style={styles.button}
           />
-          <Search title="أبحث" />
-          <View style={styles.buttonContaıner}>
-            <AppButton
-              title="القران الكريم"
-              style={styles.button}
-              onPress={() => navigation.navigate("QuranScreen")}
-            />
-            <AppButton
-              title="الاذكار"
-              style={styles.button}
-              onPress={() => navigation.navigate("AzkarScreen")}
-            />
-            <AppButton
-              title="السبحة"
-              style={styles.button}
-              onPress={() => navigation.navigate("SibhaScreen")}
-            />
-            <AppButton
-              title="الاربعون النووية"
-              style={styles.button}
-              onPress={() => navigation.navigate("FortyNawawi")}
-            />
-          </View>
+          <AppButton
+            title="الاذكار"
+            style={styles.button}
+            onPress={() => RootNavigation.navigate("AzkarScreen")}
+          />
+          <AppButton
+            title="السبحة"
+            style={styles.button}
+            onPress={() => navigation.navigate("SibhaScreen")}
+          />
+          <AppButton
+            title="الاربعون النووية"
+            style={styles.button}
+            onPress={() => navigation.navigate("FortyNawawi")}
+          />
         </View>
-      </ScrollView>
+      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 10,
-    backgroundColor: "#efefef",
-    padding: 10,
-  },
   content: {
-    paddingVertical: 30,
+    padding: 10,
     width: "100%",
-    height: "100%",
+    marginVertical: 5,
+    height: height,
+    display: "flex",
     overflow: "hidden",
   },
 
   duaaButton: {
     width: "100%",
-    paddingVertical: 90,
+    height: height / 3.7,
     backgroundColor: colors.primary,
   },
   button: {
-    marginVertical: 5,
+    marginVertical: 8,
     backgroundColor: colors.primary,
-    width: "49%",
-    paddingVertical: "25%",
+    width: "48%",
+    height: height / 4,
   },
   buttonContaıner: {
     flexDirection: "row-reverse",
     flexWrap: "wrap",
     justifyContent: "space-between",
     width: "100%",
-    flex: 1,
+    height: height / 1.9,
   },
 });
 export default HomeScreen;

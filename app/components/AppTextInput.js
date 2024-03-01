@@ -1,24 +1,25 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Keyboard } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import colors from "../config/colors";
 
-function AppTextInput({ icon, ...otherProps }) {
+function AppTextInput({ icon, style, ...otherProps }) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
           size={25}
-          color={colors.secoundery}
+          color={"gray"}
           style={styles.icon}
         />
       )}
       <TextInput
         style={styles.textinput}
         {...otherProps}
-        placeholderTextColor={colors.babyBlue}
+        placeholderTextColor={"gray"}
+        blurOnSubmit={true}
       />
     </View>
   );
@@ -27,19 +28,23 @@ function AppTextInput({ icon, ...otherProps }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
-    borderRadius: 25,
-    flexDirection: "row",
-    width: "100%",
+    borderRadius: 5,
+    flexDirection: "row-reverse",
+    width: "95%",
     padding: 15,
+    height: 70,
     marginVertical: 10,
+
+    alignItems: "center",
   },
   textinput: {
     fontSize: 18,
     color: colors.white,
-    width: "100%",
+    width: "95%",
+    padding: 10,
   },
   icon: {
-    marginRight: 10,
+    marginLeft: 5,
   },
 });
 export default AppTextInput;

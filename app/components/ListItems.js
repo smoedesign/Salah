@@ -11,19 +11,26 @@ import * as Sharing from "expo-sharing";
 import { captureRef } from "react-native-view-shot";
 import { Image } from "react-native";
 
-function ListItem({ descriptin, refrence, times, number }) {
+function ListItem({ descriptin, refrence, times, number, headers, fonts }) {
   return (
     <>
       <View style={styles.container}>
         <View style={styles.textView}>
-          <AppText style={styles.text}>{descriptin}</AppText>
-          {refrence && <AppText style={styles.refrence}>{refrence}</AppText>}
+          <AppText style={[styles.text, headers]}>{descriptin}</AppText>
+          {refrence && (
+            <AppText style={[styles.refrence, fonts]}>{refrence}</AppText>
+          )}
         </View>
         {number && times && (
           <View style={styles.sperator}>
             <AppText style={styles.times}>{times}</AppText>
             <Counter number={number} style={styles.number} />
-            <ShareImage descriptin={descriptin} refrence={refrence} />
+            <ShareImage
+              descriptin={descriptin}
+              refrence={refrence}
+              header={{ fontSize: 18 }}
+              font={{ textAlign: "center", width: "75%" }}
+            />
           </View>
         )}
       </View>
@@ -48,7 +55,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 15,
     textAlign: "center",
-    paddingVertical: 30,
+
     color: colors.primary,
   },
   times: {
@@ -63,15 +70,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft: 10,
     padding: 3,
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 2,
+    marginBottom: 15,
   },
 
-  icon: {
-    alignSelf: "flex-start",
-    left: -7,
-    marginBottom: 10,
-  },
   textcontent: {
     fontSize: 15,
     color: colors.white,

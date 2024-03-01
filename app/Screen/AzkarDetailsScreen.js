@@ -1,68 +1,41 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList, Text, ScrollView } from "react-native";
-import { useIsFocused } from "@react-navigation/native";
-import AppText from "../components/AppText";
-import AppButton from "../components/AppButton";
 import { ImageBackground } from "react-native";
 import ListItem from "../components/ListItems";
-import colors from "../config/colors";
-import clients from "../../sanity";
+import * as SQLite from "expo-sqlite";
 
-function AzkarDetailsScreen({ route, navigation }) {
-  const [menu, setMenu] = useState([]);
-  const isFocused = useIsFocused();
+const db = SQLite.openDatabase("salahApp.db");
 
-  const azkar = route.params;
+function AzkarDetailsScreen({ route }) {
+  const azkarParam = route.params?.azkar;
+  const SearchPram = route.params?.ziker;
+
+  const id = azkarParam ? azkarParam._id : SearchPram.hisAlmuslimId;
+
+  const [hisalmuslimData, setHisalmuslimData] = useState([]);
+
   useEffect(() => {
-    clients
-      .fetch(
-        `* [_type== "hisnAlmuslim"] | order(indexid asc){
-          name,
-          _id,
-            alazkar[]-> | order(indexid asc),
-              
-             }`
-      )
-      .then((data) => {
-        setMenu(data);
-      });
-  }, []);
-
+    db.transaction((tx) => {
+      tx.executeSql(
+        `SELECT * FROM alazkar WHERE hisAlmuslimId = ? ORDER BY indexid`,
+        [id],
+        (_, { rows }) => setHisalmuslimData(rows._array)
+      );
+    });
+  }, [id]);
   return (
     <ImageBackground
-      source={require("../assets/gray.jpg")}
+      source={require("../assets/babyBlue.jpg")}
       style={styles.container}>
-      <ScrollView horizontal={true}>
-        {menu.map((z) => (
-          <View style={styles.Tab} key={z._id}>
-            {z._id === azkar._id && isFocused ? (
-              <AppButton
-                style={styles.active}
-                title={z.name}
-                onPress={() => {
-                  navigation.navigate("AzkarDetailsScreen", z);
-                }}
-              />
-            ) : (
-              <AppButton
-                style={styles.TopTab}
-                title={z.name}
-                onPress={() => {
-                  navigation.push("AzkarDetailsScreen", z);
-                }}
-              />
-            )}
-          </View>
-        ))}
-      </ScrollView>
       <ScrollView style={styles.Screen}>
-        {azkar.alazkar.map((ziker) => (
+        {hisalmuslimData.map((ziker) => (
           <ListItem
             key={ziker._id}
             descriptin={ziker.description}
             number={ziker.count}
             refrence={ziker.refrance}
             times={ziker.countnumber}
+            headers={{ paddingVertical: 25, fontSize: 19, fontWeight: 500 }}
           />
         ))}
       </ScrollView>
@@ -74,42 +47,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  Tab: {
-    backgroundColor: colors.secoundery,
-    borderRightColor: colors.lightGray,
-    marginTop: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    height: 60,
-  },
-  TopTab: {
-    color: colors.white,
-    fontWeight: "600",
-    height: 30,
-    marginVertical: 15,
-    marginHorizontal: 7,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  active: {
-    backgroundColor: colors.primary,
-    color: colors.white,
-    fontWeight: "600",
-    height: "100%",
-    paddingHorizontal: 10,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  list: {
-    marginTop: 10,
-  },
+
   Screen: {
     padding: 15,
-    marginBottom: 20,
+    marginBottom: 30,
   },
 });
 export default AzkarDetailsScreen;

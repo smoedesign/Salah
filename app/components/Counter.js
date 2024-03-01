@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { Text, StyleSheet, Pressable } from "react-native";
 import AppButton from "./AppButton";
 import colors from "../config/colors";
 
@@ -13,14 +13,9 @@ function Counter({ number, style }) {
   };
 
   return (
-    <View style={[styles.container, style]}>
-      <AppButton
-        style={styles.timer}
-        title={count}
-        onPress={onPress}
-        color={colors.primary}
-      />
-    </View>
+    <Pressable onPress={onPress} underlayColor={colors.blue}>
+      {number && <Text style={styles.container}>{count}</Text>}
+    </Pressable>
   );
 }
 
@@ -28,16 +23,12 @@ const styles = StyleSheet.create({
   container: {
     width: 50,
     height: 50,
-    borderRadius: 30,
-    backgroundColor: colors.white,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  timer: {
-    backgroundColor: colors.white,
+    borderRadius: 25,
+    fontSize: 18,
 
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: colors.white,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
 });
 export default Counter;

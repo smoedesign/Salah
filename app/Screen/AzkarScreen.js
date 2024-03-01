@@ -10,43 +10,37 @@ import {
 
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
-import Header from "../components/Header";
-import Search from "../components/Search";
+
 import colors from "../config/colors";
-import clients from "../../sanity";
+
+import * as SQLite from "expo-sqlite";
+import { FlashList } from "@shopify/flash-list";
+
+const db = SQLite.openDatabase("salahApp.db");
 
 function AzkarScreen({ navigation }) {
-  const [azkar, setAlazkar] = useState([]);
+  const [hisalmuslimData, setHisalmuslimData] = useState([]);
   const [text, setChangeText] = useState("");
 
   useEffect(() => {
-    clients
-      .fetch(
-        `* [_type== "hisnAlmuslim"] | order(indexid asc){
-          name,
-          _id,
-            alazkar[]-> | order(indexid asc),
-              
-             }`
-      )
-      .then((data) => {
-        setAlazkar(data);
+    try {
+      db.transaction((tx) => {
+        tx.executeSql(`SELECT * FROM hisnAlmuslim`, null, (_, { rows }) =>
+          setHisalmuslimData(rows._array)
+        );
       });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
-  const searchArabic=(item)=>{
-    const b = "\u0627"; //ا
-    const a = "\u0625"; //أ
-azkar.filter((word)=> {if(word.includes(b) || word.includes(a)) 
-
-return word
-})
-
-  }
 
   const filterData = (item) => {
+    const b = "\u0627"; //ا
+    const c = "\u0623"; //أ
+
     const Searchitem = text;
-    const name = item.name;
-    
+    const name = item.name.includes(c) ? item.name.replace(c, b) : item.name;
+
     if (Searchitem == "") {
       return (
         <AppButton
@@ -54,21 +48,24 @@ return word
           title={name}
           style={styles.azkarContainer}
           onPress={() => {
-            navigation.navigate("AzkarDetailsScreen", item);
+            navigation.navigate("AzkarDetailsScreen", { azkar: item });
           }}
         />
       );
     }
 
-    if (name.includes(Searchitem)) {
-      
+    if (
+      name.includes(
+        Searchitem.includes(c) ? Searchitem.replace(c, b) : Searchitem
+      )
+    ) {
       return (
         <AppButton
           key={item._id}
           title={name}
           style={styles.azkarContainer}
           onPress={() => {
-            navigation.navigate("AzkarDetailsScreen", item);
+            navigation.navigate("AzkarDetailsScreen", { azkar: item });
           }}
         />
       );
@@ -77,27 +74,29 @@ return word
 
   return (
     <Screen style={styles.container}>
-      <TouchableWithoutFeedback>
-        <View style={styles.searchContainer}>
-          <TextInput
-            editable
-            value={text}
-            style={styles.input}
-            onChangeText={(text) => setChangeText(text.toString())}
-            clearTextOnFocus
-            keyboardType="default"
-          />
-          <AppButton
-            style={styles.title}
-            onPress={(text) => setChangeText(text)}
-            title={"ابحث"}
-          />
-        </View>
-      </TouchableWithoutFeedback>
-      <FlatList
-        data={azkar}
+      <View style={styles.searchContainer}>
+        <TextInput
+          inputMode="text"
+          textAlign="right"
+          editable
+          value={text}
+          style={styles.input}
+          onChangeText={(text) => setChangeText(text)}
+          clearTextOnFocus
+          keyboardType="default"
+        />
+        <AppButton
+          style={styles.title}
+          onPress={(text) => setChangeText(text)}
+          title={"ابحث"}
+        />
+      </View>
+
+      <FlashList
+        data={hisalmuslimData}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => filterData(item)}
+        estimatedItemSize={200}
       />
     </Screen>
   );
@@ -106,11 +105,11 @@ return word
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
-    marginBottom: 15,
-    paddingBottom: 40,
+    marginBottom: 20,
+    height: "100%",
   },
   azkarContainer: {
-    height: 50,
+    height: 55,
     marginBottom: 10,
     alignItems: "flex-end",
     paddingRight: 20,
@@ -122,22 +121,23 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     width: "100%",
-    height: 50,
-    marginVertical: 20,
+    height: 60,
+    marginBottom: 25,
     justifyContent: "flex-end",
     flexDirection: "row-reverse",
     borderRadius: 4,
     overflow: "hidden",
     backgroundColor: colors.primary,
+    writingDirection: "rtl",
   },
   input: {
     backgroundColor: colors.primary,
     flexGrow: 1,
     height: "100%",
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     paddingVertical: 5,
     color: colors.white,
-    fontSize: 18,
+    fontSize: 20,
     writingDirection: "rtl",
   },
   title: {

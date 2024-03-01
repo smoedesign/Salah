@@ -2,13 +2,19 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import NamesOfAllah from "../Screen/NamesOfAllah";
 import AzkarScreen from "../Screen/AzkarScreen";
 import SibhaScreen from "../Screen/SibhaScreen";
-import AppButton from "../components/AppButton";
+import { AntDesign } from "@expo/vector-icons";
 import FortyNawawi from "../Screen/FortyNawawi";
 import HomeScreen from "../Screen/HomeScreen";
-import { Image } from "react-native";
+import { Image, Pressable, Text } from "react-native";
 import colors from "../config/colors";
+import FeedbackScreens from "../Screen/FeedbackScreen";
+import About from "../Screen/About";
+import { View } from "react-native";
+import Setting from "../Screen/Setting";
+import Sepratoress from "../components/Sepratoress";
 
 const Drawer = createDrawerNavigator();
+
 function LogoTitle() {
   return (
     <Image
@@ -21,19 +27,23 @@ function LogoTitle() {
 const MenuNavigator = () => (
   <Drawer.Navigator
     screenOptions={{
-      drawerItemStyle: {
-        backgroundColor: colors.primary,
-        paddingVertical: 10,
-      },
-      drawerLabelStyle: {
-        color: colors.white,
-      },
-      drawerStyle: {
-        width: "80%",
-      },
       drawerType: "front",
+      drawerStyle: {
+        width: "85%",
+        paddingTop: 30,
+      },
     }}>
-    <Drawer.Group>
+    <Drawer.Group
+      screenOptions={{
+        drawerItemStyle: {
+          backgroundColor: colors.primary,
+          paddingVertical: 12,
+        },
+        drawerLabelStyle: {
+          color: colors.white,
+          fontSize: 16,
+        },
+      }}>
       <Drawer.Screen
         name="Home"
         component={HomeScreen}
@@ -44,23 +54,215 @@ const MenuNavigator = () => (
         }}
       />
 
-      {/* <Drawer.Screen
+      <Drawer.Screen
         name="Azkar"
         component={AzkarScreen}
-        options={{ title: "الاذكار" }}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "الاذكار",
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>{"الاذكار"}</Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
       />
       <Drawer.Screen
         name="Sibha"
         component={SibhaScreen}
-        options={{ title: "السبحة" }}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "السبحة",
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>{"السبحة"}</Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
       />
       <Drawer.Screen
         name="FortyNawawia"
         component={FortyNawawi}
-        options={{
-          title: "الاربعون النووية",
-        }}
-      /> */}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "الاربعون النووية",
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>
+                {"الاربعون النووية"}
+              </Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
+      />
+    </Drawer.Group>
+    <Drawer.Screen
+      name="Separator"
+      component={Sepratoress}
+      options={{
+        drawerLabel: () => null,
+        drawerItemStyle: {
+          marginTop: 15,
+          marginBottom: 15,
+          height: 1,
+          backgroundColor: "gray",
+        },
+      }}
+    />
+    <Drawer.Group
+      screenOptions={{
+        drawerItemStyle: {
+          backgroundColor: colors.primary,
+          paddingVertical: 12,
+        },
+        drawerLabelStyle: {
+          color: colors.white,
+          fontSize: 16,
+        },
+      }}>
+      <Drawer.Screen
+        name="setting"
+        component={Setting}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "الضبط",
+
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>"الضبط"</Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
+      />
+      <Drawer.Screen
+        name="About"
+        component={About}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "حول التطبيق",
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>
+                "حول التطبيق"
+              </Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
+      />
+      <Drawer.Screen
+        name="ra"
+        component={FeedbackScreens}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "قيم التطبيق",
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>
+                "قيم التطبيق"
+              </Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
+      />
+      <Drawer.Screen
+        name="feedback"
+        component={FeedbackScreens}
+        options={({ navigation }) => ({
+          title: "",
+          drawerLabel: "تواصل معنا",
+          headerRight: () => (
+            <Pressable
+              style={{
+                display: "flex",
+                flexDirection: "row-reverse",
+                marginRight: 20,
+              }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <AntDesign name="right" size={24} color="black" />
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>
+                {"تواصل معنا"}
+              </Text>
+            </Pressable>
+          ),
+
+          navigationBarHidden: true,
+          drawerIcon: () => null,
+        })}
+      />
     </Drawer.Group>
   </Drawer.Navigator>
 );

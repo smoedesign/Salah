@@ -15,6 +15,7 @@ function AppButton({
   onPress,
   numberStyle,
   color = "white",
+  disabled,
 }) {
   return (
     <Pressable
