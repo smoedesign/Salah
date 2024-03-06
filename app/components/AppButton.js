@@ -36,11 +36,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "bold",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 200,
+    color: colors.lightGray,
   },
 });
 export default AppButton;

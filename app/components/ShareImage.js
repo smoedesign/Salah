@@ -1,4 +1,4 @@
-import { View, Text, Alert, StyleSheet, Modal } from "react-native";
+import { View, Text, Alert, StyleSheet, Modal, Image } from "react-native";
 import colors from "../config/colors";
 import * as Clipboard from "expo-clipboard";
 import { useState, useRef } from "react";
@@ -48,7 +48,6 @@ function ShareImage({
   const copy = async () => {
     const copiedText = descriptin + "\n" + refrence;
 
-   
     await Clipboard.setStringAsync(copiedText);
 
     Toast.show("تم نسخ النص", {
@@ -84,7 +83,7 @@ function ShareImage({
             delay: 0,
             zIndex: 7000,
           });
-        }, 2000);
+        }, 2500);
       } catch (error) {
         console.log(error);
       }
@@ -200,10 +199,25 @@ function ShareImage({
           translucent={true}
           statusBarTranslucent={true}>
           <View ref={viewToSnapRef} style={styles.view}>
-            <Text style={[styles.textcontent, header]}>{descriptin} </Text>
-            {refrence && (
-              <Text style={[styles.textRefrenc, font]}>{refrence}</Text>
-            )}
+            <View style={styles.stretch}>
+              <Image
+                source={require("../assets/salahLight.png")}
+                resizeMode="contain"
+                style={{ width: 100, height: 100 }}
+              />
+            </View>
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+                marginBottom: 40,
+              }}>
+              <Text style={[styles.textcontent, header]}>{descriptin} </Text>
+              {refrence && (
+                <Text style={[styles.textRefrenc, font]}>{refrence}</Text>
+              )}
+            </View>
           </View>
         </Modal>
       )}
@@ -221,6 +235,10 @@ const styles = StyleSheet.create({
     marginTop: 70,
     borderRadius: 20,
   },
+  stretch: {
+    alignSelf: "center",
+    marginTop: 25,
+  },
   textRefrenc: {
     fontSize: 13,
     marginTop: 20,
@@ -231,7 +249,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 20,
-    top: -1,
+    bottom: -20,
     position: "absolute",
     left: -20,
     elevation: 10,
@@ -264,9 +282,9 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: colors.primary,
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    alignSelf: "center",
+
     display: "flex",
     flexDirection: "column",
     paddingHorizontal: 20,

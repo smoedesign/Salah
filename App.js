@@ -4,12 +4,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeNavigator from "./app/navigation/HomeNavigation";
 import NavigationTheme from "./app/navigation/NavigationTheme";
 import "react-native-url-polyfill/auto";
-import RootNavigation  from "./app/navigation/RootNavigation";
+import RootNavigation from "./app/navigation/RootNavigation";
+
 
 function App() {
   return (
     <>
-      <NavigationContainer theme={NavigationTheme} ref={RootNavigation.NavigateRef}>
+      <NavigationContainer
+        theme={NavigationTheme}
+        ref={RootNavigation.NavigateRef}>
         <RootSiblingParent>
           <MenuProvider>
             <HomeNavigator />

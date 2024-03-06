@@ -10,11 +10,7 @@ function Search({ title, editable, onPress, inputText }) {
       <View style={styles.container}>
         <AppButton
           style={styles.title}
-          onPress={(text) => {
-            if (!text) return;
-
-            onChangeText(text);
-          }}
+          
           title={title}
         />
         <TextInput

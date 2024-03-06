@@ -17,9 +17,6 @@ const db = SQLite.openDatabase("salahApp.db");
 const Stack = createNativeStackNavigator();
 
 const HomeNavigator = () => {
-  const [appState, setAppState] = useState(AppState.currentState);
-  const [notificationsScheduled, setNotificationsScheduled] = useState(false);
-
   const notificationListener = useRef(null);
   const responseListener = useRef(null);
   const createNotificationChannel = async () => {
@@ -32,37 +29,21 @@ const HomeNavigator = () => {
   };
 
   const scheduleLocalNotification = async () => {
-    const now = new Date();
-    const SixPM = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + 1,
-      18,
-      0,
-      0,
-      0
-    );
-    const SixAm = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + 1,
-      6,
-      0,
-      0,
-      0
-    );
-    const todayAt9PM = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      21,
-      0,
-      0,
-      0
-    );
-    if (todayAt9PM < now) {
-      todayAt9PM.setDate(todayAt9PM.getDate() + 1);
-    }
+    const trigger = new Date(Date.now() + 60 * 60 * 1000); // add 1 hour to the current time
+    trigger.setHours(6); // set the hour to 6
+    trigger.setMinutes(0); // set the minutes to 0
+    trigger.setSeconds(0); // set the seconds to 0
+
+    const trigger6PM = new Date(Date.now() + 60 * 60 * 1000); // add 1 hour to the current time
+    trigger6PM.setHours(18); // set the hour to 18
+    trigger6PM.setMinutes(0); // set the minutes to 0
+    trigger6PM.setSeconds(0); // set the seconds to 0
+
+    const trigger9PM = new Date(Date.now() + 60 * 60 * 1000); // add 1 hour to the current time
+    trigger9PM.setHours(21); // set the hour to 21
+    trigger9PM.setMinutes(0); // set the minutes to 0
+    trigger9PM.setSeconds(0); // set the seconds to 0
+
     try {
       const { status: existingStatus } =
         await Notifications.getPermissionsAsync();
@@ -88,8 +69,8 @@ const HomeNavigator = () => {
         },
         identifier: "108b993f-944f-42ac-85a1-ba6e469761b1",
         trigger: {
-          date: SixAm,
-          weekday: "",
+          date: trigger,
+
           repeats: true,
         },
       });
@@ -106,9 +87,8 @@ const HomeNavigator = () => {
         },
         identifier: "bc1df5d6-de3e-4f33-886b-2c0e649e2119",
         trigger: {
-          date: SixPM,
+          date: trigger6PM,
           repeats: true,
-          weekday: "",
         },
       });
       await Notifications.scheduleNotificationAsync({
@@ -125,36 +105,18 @@ const HomeNavigator = () => {
         },
         identifier: "9c6b94cc-8c1d-4bf2-bfaf-7a1216b7617a",
         trigger: {
-          date: todayAt9PM,
+          date: trigger9PM,
           repeats: true,
-          weekday: "",
         },
       });
-      console.log("Daily notification scheduled successfully.");
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      if (
-        appState.match(/inactive|background/) &&
-        nextAppState === "active" &&
-        !notificationsScheduled
-      ) {
-        scheduleLocalNotification();
-        createNotificationChannel();
-        setNotificationsScheduled(true);
-      }
-      setAppState(nextAppState);
-    };
-
-    AppState.addEventListener("change", handleAppStateChange);
-
-    return () => {
-      AppState.removeEventListener("change", handleAppStateChange);
-    };
-  }, [appState, notificationsScheduled]);
+    scheduleLocalNotification();
+    createNotificationChannel();
+  }, []);
   useEffect(() => {
     const handleNotification = () => {
       Notifications.setNotificationHandler({

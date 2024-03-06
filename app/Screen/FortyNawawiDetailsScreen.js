@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import ListItem from "../components/ListItems";
 import ShareImage from "../components/ShareImage";
@@ -6,25 +6,15 @@ import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import { ImageBackground } from "react-native";
 import Toast from "react-native-root-toast";
-import * as SQLite from "expo-sqlite";
-
-const db = SQLite.openDatabase("salahApp.db");
+import useDatabase from "../hooks/useDatabase";
 
 function FortyNawawiDetailsScreen({ route, navigation }) {
   const forty = route.params;
 
-  const [nextItem, setNextItem] = useState([]);
+  const { data: nextItem, request } = useDatabase("fortyNawawia");
 
   useEffect(() => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM fortyNawawia;`, null, (_, result) => {
-          setNextItem(result.rows._array);
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    request("fortyNawawia");
   }, []);
 
   return (
@@ -51,8 +41,6 @@ function FortyNawawiDetailsScreen({ route, navigation }) {
               );
               if (previousHadith) {
                 navigation.navigate("FortyNawawiDetailsScreen", previousHadith);
-              } else if (forty.indexid === 1) {
-                console.log("disabled");
               }
             }}
             title={"السابق"}

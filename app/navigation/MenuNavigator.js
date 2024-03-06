@@ -11,10 +11,13 @@ import FeedbackScreens from "../Screen/FeedbackScreen";
 import About from "../Screen/About";
 import { View } from "react-native";
 import Setting from "../Screen/Setting";
-import Sepratoress from "../components/Sepratoress";
 
 const Drawer = createDrawerNavigator();
 
+
+const Sepratoress = () => {
+  return <View></View>;
+};
 function LogoTitle() {
   return (
     <Image
@@ -66,6 +69,8 @@ const MenuNavigator = () => (
                 display: "flex",
                 flexDirection: "row-reverse",
                 marginRight: 20,
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={() => {
                 navigation.goBack();
@@ -74,9 +79,6 @@ const MenuNavigator = () => (
               <Text style={{ fontSize: 20, fontWeight: 600 }}>{"الاذكار"}</Text>
             </Pressable>
           ),
-
-          navigationBarHidden: true,
-          drawerIcon: () => null,
         })}
       />
       <Drawer.Screen
@@ -91,6 +93,8 @@ const MenuNavigator = () => (
                 display: "flex",
                 flexDirection: "row-reverse",
                 marginRight: 20,
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={() => {
                 navigation.goBack();
@@ -116,6 +120,8 @@ const MenuNavigator = () => (
                 display: "flex",
                 flexDirection: "row-reverse",
                 marginRight: 20,
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={() => {
                 navigation.goBack();
@@ -174,7 +180,7 @@ const MenuNavigator = () => (
                 navigation.goBack();
               }}>
               <AntDesign name="right" size={24} color="black" />
-              <Text style={{ fontSize: 20, fontWeight: 600 }}>"الضبط"</Text>
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>{"الضبط"}</Text>
             </Pressable>
           ),
 
@@ -187,6 +193,7 @@ const MenuNavigator = () => (
         component={About}
         options={({ navigation }) => ({
           title: "",
+
           drawerLabel: "حول التطبيق",
           headerRight: () => (
             <Pressable
@@ -194,13 +201,20 @@ const MenuNavigator = () => (
                 display: "flex",
                 flexDirection: "row-reverse",
                 marginRight: 20,
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={() => {
                 navigation.goBack();
               }}>
-              <AntDesign name="right" size={24} color="black" />
-              <Text style={{ fontSize: 20, fontWeight: 600 }}>
-                "حول التطبيق"
+              <AntDesign name="right" size={24} color={colors.primary} />
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: 600,
+                  color: colors.primary,
+                }}>
+                {"حول التطبيق"}
               </Text>
             </Pressable>
           ),
@@ -221,6 +235,8 @@ const MenuNavigator = () => (
                 display: "flex",
                 flexDirection: "row-reverse",
                 marginRight: 20,
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={() => {
                 navigation.goBack();
@@ -248,6 +264,8 @@ const MenuNavigator = () => (
                 display: "flex",
                 flexDirection: "row-reverse",
                 marginRight: 20,
+                justifyContent: "center",
+                alignItems: "center",
               }}
               onPress={() => {
                 navigation.goBack();

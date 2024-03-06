@@ -1,6 +1,8 @@
 import { create } from "apisauce";
+import { Settings } from "react-native";
+import settings from "../config/settings";
 const apiClient = create({
-  baseURL: "https://o1bqd984.api.sanity.io/v2021-06-07/data/query",
+  baseURL: settings.baseURL,
 });
 
 export default apiClient;

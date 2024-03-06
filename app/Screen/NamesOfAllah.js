@@ -13,22 +13,15 @@ import ListItem from "../components/ListItems";
 import ShareImage from "../components/ShareImage";
 import { FlashList } from "@shopify/flash-list";
 import * as SQLite from "expo-sqlite";
+import useDatabase from "../hooks/useDatabase";
 
 const db = SQLite.openDatabase("salahApp.db");
 
 function NamesOfAllah() {
-  const [names, setNames] = useState([]);
+  const { data: names, request } = useDatabase();
 
   useEffect(() => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM namesOfAllah`, null, (_, { rows }) =>
-          setNames(rows._array)
-        );
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    request("namesOfAllah");
   }, []);
 
   return (

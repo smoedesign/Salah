@@ -1,37 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  FlatList,
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 
 import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
-
 import colors from "../config/colors";
-
-import * as SQLite from "expo-sqlite";
-import { FlashList } from "@shopify/flash-list";
-
-const db = SQLite.openDatabase("salahApp.db");
+import useDatabase from "../hooks/useDatabase";
 
 function AzkarScreen({ navigation }) {
-  const [hisalmuslimData, setHisalmuslimData] = useState([]);
   const [text, setChangeText] = useState("");
+  const { data: hisalmuslimData, request } = useDatabase();
 
   useEffect(() => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM hisnAlmuslim`, null, (_, { rows }) =>
-          setHisalmuslimData(rows._array)
-        );
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    request("hisnAlmuslim");
   }, []);
 
   const filterData = (item) => {
@@ -85,11 +66,7 @@ function AzkarScreen({ navigation }) {
           clearTextOnFocus
           keyboardType="default"
         />
-        <AppButton
-          style={styles.title}
-          onPress={(text) => setChangeText(text)}
-          title={"ابحث"}
-        />
+        <AppButton style={styles.title} title={"ابحث"} />
       </View>
 
       <FlashList

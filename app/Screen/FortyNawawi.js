@@ -1,33 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native";
-import Screen from "../components/Screen";
-import Header from "../components/Header";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
 import colors from "../config/colors";
 import AppText from "../components/AppText";
-import clients from "../../sanity";
-import useApi from "../hooks/useApi";
-import nawawiaApi from "../api/nawawia";
-import * as SQLite from "expo-sqlite";
-import { FlashList } from "@shopify/flash-list";
 
-const db = SQLite.openDatabase("salahApp.db");
+import { FlashList } from "@shopify/flash-list";
+import useDatabase from "../hooks/useDatabase";
 
 function FortyNawawi({ navigation }) {
-  const [forty, setForty] = useState([]);
+  const { data: forty, request } = useDatabase();
 
   useEffect(() => {
-    try {
-      db.transaction((tx) => {
-        tx.executeSql(`SELECT * FROM fortyNawawia;`, null, (_, result) => {
-          setForty(result.rows._array);
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    request("fortyNawawia");
   }, []);
-
-  /*fortyNawawia*/
 
   return (
     <View style={styles.container}>

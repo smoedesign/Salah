@@ -3,11 +3,9 @@ import { View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import Header from "../components/Header";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
-import AppText from "../components/AppText";
 import ErrorMessages from "../components/ErrorMessages";
 import { sendEmail } from "../utility/sendEmail";
 
@@ -56,6 +54,7 @@ function FeedbackScreens() {
               onChangeText={(text) => setFieldValue("email", text)}
               value={values.email}
             />
+            <ErrorMessages error={errors.email} visible={touched.email} />
             <AppTextInput
               placeholder="الرسالة"
               numberOfLines={15}

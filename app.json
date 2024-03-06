@@ -3,16 +3,10 @@
     "name": "salah",
     "slug": "salah",
     "version": "1.0.0",
+    "platforms": ["ios", "android"],
     "orientation": "portrait",
     "icon": "./app/assets/logo.png",
-    "androidNavigationBar": {
-      "visible": "sticky-immersive"
-    },
-    "notificationsPermission": "Allow $(PRODUCT_NAME) to Send notifications.",
-    "notifications": {
-      "iosDisplayInForeground": true
-    },
-    "permissions": ["SCHEDULE_EXACT_ALARM"],
+    "description": "تطبيق صلاح الدين، للاذكار اليومية والادعية. لصلاح ديننا ودنيانا.",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./app/assets/splash.png",
@@ -21,22 +15,52 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.smoedesign.salah"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.smoedesign.salah"
     },
     "web": {
       "favicon": "../app/assets/logo.png"
     },
+    "notification": {
+      "iosDisplayInForeground": true
+    },
     "extra": {
       "eas": {
         "projectId": "11464412-8b33-4a2c-897e-929f3d2bf986"
+      },
+      "bugsnag": {
+        "apiKey": "5d0998395ea413d22becc7b227a0d488"
       }
     },
-    "owner": "smoedesign"
+    "owner": "smoedesign",
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "@bugsnag/expo/hooks/post-publish.js",
+          "config": {}
+        }
+      ]
+    },
+    "plugins": [
+      [
+        "expo-updates",
+        {
+          "username": "smoedesign"
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/11464412-8b33-4a2c-897e-929f3d2bf986"
+    }
   }
 }

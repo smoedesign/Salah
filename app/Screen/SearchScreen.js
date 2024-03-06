@@ -11,53 +11,57 @@ import {
 import * as SQLite from "expo-sqlite";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
+import useDatabase from "../hooks/useDatabase";
 
-const db = SQLite.openDatabase("salahApp.db");
 function SearchScreen({ navigation }) {
+  const { data, request } = useDatabase();
+  const { data: hisn, request: HisnFetch } = useDatabase();
+  const { data: forty, request: Forties } = useDatabase();
   const [searchTerm, setSearchTerm] = useState("");
   const [hisnAlmuslim, setHisnAlmuslim] = useState([]);
   const [nawawia, setNawawia] = useState([]);
   const [names, SetNames] = useState([]);
 
   function normalizeArabic(text) {
-    if (text.startsWith("اذ")) {
-      return "أذ" + text.slice(2); // Normalize to 'أذ' + the rest of the text
-    }
     return text
       .replace(/[\u064B-\u065F]/g, "") // Remove diacritic marks
       .replace(/\u0622|\u0623|\u0625|\u0627/g, "ا") // Normalize Alef variations
       .replace(/\u0649|\u064A/g, "ي"); // Normalize Yeh variations
   }
-
-  const searchInDatabase = (searchTerm) => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        `SELECT * FROM namesOfAllah WHERE name LIKE "%${searchTerm}%" OR description LIKE "%${searchTerm}%"`,
-        [],
-        (_, { rows }) => {
-          console.log(rows._array);
-        }
-      );
-      // tx.executeSql(
-      //   "SELECT * FROM fortyNawawia WHERE nameofhadith LIKE ? OR description LIKE ?",
-      //   [`%${searchTerm}%`, `%${searchTerm}%`],
-      //   (_, { rows: { _array } }) => {
-      //     setNawawia(_array);
-      //   }
-      // );
-      // tx.executeSql(
-      //   "SELECT * FROM hisnAlmuslim  LEFT JOIN alazkar ON hisnAlmuslim._id = alazkar.hisAlmuslimId WHERE hisnAlmuslim.name LIKE ? OR alazkar.description LIKE  ?",
-      //   [`%${searchTerm}%`, `%${searchTerm}%`],
-      //   (_, { rows: { _array } }) => {
-      //     setHisnAlmuslim(_array);
-      //   }
-      // );
-    });
+  const fetchData = async () => {
+    const conditions =
+      "LEFT JOIN alazkar ON hisnAlmuslim._id = alazkar.hisAlmuslimId";
+    await request("namesOfAllah");
+    await Forties("fortyNawawia");
+    await HisnFetch("hisnAlmuslim", conditions);
   };
-  const handleSearch = (searchTerm) => {
-    const conver = normalizeArabic(searchTerm.toString());
 
-    searchInDatabase(conver);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSearch = () => {
+    const search = normalizeArabic(searchTerm);
+    const filteredData = data.filter(
+      (item) =>
+        normalizeArabic(item.name).includes(search) ||
+        normalizeArabic(item.description).includes(search)
+    );
+
+    const filterFortiyes = forty.filter(
+      (fort) =>
+        normalizeArabic(fort.nameofhadith).includes(search) ||
+        normalizeArabic(fort.description)?.includes(search)
+    );
+    const filterHisn = hisn.filter(
+      (his) =>
+        normalizeArabic(his.name)?.includes(search) ||
+        normalizeArabic(his.description)?.includes(search)
+    );
+
+    SetNames(filteredData);
+    setNawawia(filterFortiyes);
+    setHisnAlmuslim(filterHisn);
   };
 
   return (
