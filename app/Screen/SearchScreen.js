@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import {
   View,
   StyleSheet,
   TextInput,
-  Button,
   ScrollView,
   Text,
   Pressable,
 } from "react-native";
-import * as SQLite from "expo-sqlite";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import useDatabase from "../hooks/useDatabase";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
 function SearchScreen({ navigation }) {
+  const deviceLanguage = useDeviceLanguage();
+
   const { data, request } = useDatabase();
   const { data: hisn, request: HisnFetch } = useDatabase();
   const { data: forty, request: Forties } = useDatabase();
@@ -23,11 +24,16 @@ function SearchScreen({ navigation }) {
   const [names, SetNames] = useState([]);
 
   function normalizeArabic(text) {
+    if (text == null) {
+      return ""; // or handle it according to your needs
+    }
+
     return text
       .replace(/[\u064B-\u065F]/g, "") // Remove diacritic marks
       .replace(/\u0622|\u0623|\u0625|\u0627/g, "ا") // Normalize Alef variations
       .replace(/\u0649|\u064A/g, "ي"); // Normalize Yeh variations
   }
+
   const fetchData = async () => {
     const conditions =
       "LEFT JOIN alazkar ON hisnAlmuslim._id = alazkar.hisAlmuslimId";
@@ -66,7 +72,15 @@ function SearchScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.Inputcontainer}>
+      <View
+        style={[
+          styles.Inputcontainer,
+          {
+            flexDirection: deviceLanguage.startsWith("ar")
+              ? "row"
+              : "row-reverse",
+          },
+        ]}>
         <TextInput
           value={searchTerm}
           inputMode="text"
@@ -153,7 +167,6 @@ const styles = StyleSheet.create({
     height: 60,
     marginVertical: 20,
     justifyContent: "flex-end",
-    flexDirection: "row-reverse",
     borderRadius: 4,
     overflow: "hidden",
     backgroundColor: colors.primary,
@@ -177,4 +190,4 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
 });
-export default SearchScreen;
+export default memo(SearchScreen);

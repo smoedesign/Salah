@@ -1,8 +1,9 @@
-import React, {  useEffect } from "react";
-import {  StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, memo } from "react";
+import { StyleSheet } from "react-native";
 import { ImageBackground } from "react-native";
 import ListItem from "../components/ListItems";
 import useDatabase from "../hooks/useDatabase";
+import { FlashList } from "@shopify/flash-list";
 
 function AzkarDetailsScreen({ route }) {
   const azkarParam = route.params?.azkar;
@@ -10,6 +11,7 @@ function AzkarDetailsScreen({ route }) {
 
   const id = azkarParam ? azkarParam._id : SearchPram.hisAlmuslimId;
   const { data: AzkarData, request } = useDatabase();
+
   useEffect(() => {
     const conditions = "WHERE hisAlmuslimId = ? ORDER BY indexid";
     const parameters = [id];
@@ -20,18 +22,27 @@ function AzkarDetailsScreen({ route }) {
     <ImageBackground
       source={require("../assets/babyBlue.jpg")}
       style={styles.container}>
-      <ScrollView style={styles.Screen}>
-        {AzkarData.map((ziker) => (
+      <FlashList
+        data={AzkarData}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
           <ListItem
-            key={ziker._id}
-            descriptin={ziker.description}
-            number={ziker.count}
-            refrence={ziker.refrance}
-            times={ziker.countnumber}
-            headers={{ paddingVertical: 25, fontSize: 19, fontWeight: 500 }}
+            key={item._id}
+            descriptin={item.description}
+            number={item.count}
+            refrence={item.refrance}
+            times={item.countnumber}
+            headers={{
+              paddingVertical: 25,
+              fontSize: 19,
+              fontWeight: 500,
+              textAlign: "center",
+            }}
+            fonts={{ textAlign: "center" }}
           />
-        ))}
-      </ScrollView>
+        )}
+        estimatedItemSize={400}
+      />
     </ImageBackground>
   );
 }
@@ -39,11 +50,13 @@ function AzkarDetailsScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 40,
+    paddingHorizontal: 20,
   },
 
   Screen: {
     padding: 15,
-    marginBottom: 30,
+    marginBottom: 20,
   },
 });
-export default AzkarDetailsScreen;
+export default memo(AzkarDetailsScreen);

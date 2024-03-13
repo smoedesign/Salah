@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   View,
   StyleSheet,
@@ -6,28 +6,29 @@ import {
   TouchableWithoutFeedback,
   Pressable,
   FlatList,
-  Text,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import AppText from "./AppText";
 import PikerItems from "./PikerItems";
-import History from "./SibhaHistory";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
-function AppPicker({
-  icon,
-  items,
-  placeholder,
-  SelectedZiker,
-  onSelectZiker,
-  pressedTimes,
-}) {
+function AppPicker({ icon, items, placeholder, SelectedZiker, onSelectZiker }) {
   const [modalVisiable, setModalVisible] = useState(false);
+  const deviceLanguage = useDeviceLanguage();
 
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {
+              flexDirection: deviceLanguage.startsWith("ar")
+                ? "row"
+                : "row-reverse",
+            },
+          ]}>
           {icon && (
             <MaterialCommunityIcons
               name={icon}
@@ -37,7 +38,7 @@ function AppPicker({
             />
           )}
           <AppText style={styles.text}>
-            {SelectedZiker ? SelectedZiker.label : placeholder}{" "}
+            {SelectedZiker ? SelectedZiker.label : placeholder}
           </AppText>
 
           <MaterialCommunityIcons
@@ -56,10 +57,14 @@ function AppPicker({
           onRequestClose={() => {
             setModalVisible(!modalVisiable);
           }}>
-          <View style={styles.Modal}>
+          <View style={[styles.Modal]}>
             <Pressable
               onPress={() => setModalVisible(false)}
-              style={styles.iconmodal}>
+              style={
+                deviceLanguage.startsWith("ar")
+                  ? styles.iconLeft
+                  : styles.iconmodal
+              }>
               <MaterialCommunityIcons
                 color={colors.white}
                 name="close"
@@ -100,6 +105,14 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 3,
   },
+  iconLeft: {
+    position: "absolute",
+    backgroundColor: colors.primary,
+    top: 25,
+    right: 17,
+    borderRadius: 20,
+    padding: 3,
+  },
   Modal: {
     flex: 1,
     justifyContent: "flex-start",
@@ -110,7 +123,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
   },
   container: {
-    flexDirection: "row-reverse",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -136,4 +148,4 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
-export default AppPicker;
+export default memo(AppPicker);

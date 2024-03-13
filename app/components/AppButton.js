@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  Text,
-  StyleSheet,
-  TouchableHighlight,
-  disabled,
-  Pressable,
-} from "react-native";
+import React, { memo } from "react";
+import { Text, StyleSheet, Pressable } from "react-native";
 import colors from "../config/colors";
 
 function AppButton({
@@ -44,4 +38,4 @@ const styles = StyleSheet.create({
     color: colors.lightGray,
   },
 });
-export default AppButton;
+export default memo(AppButton);

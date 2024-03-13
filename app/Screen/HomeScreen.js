@@ -7,17 +7,25 @@ import Search from "../components/Search";
 import { Dimensions } from "react-native";
 import RootNavigation from "../navigation/RootNavigation";
 import DuaaContainer from "../components/DuaaContainer";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
 const { height } = Dimensions.get("window");
 const container1Height = height / 4.3;
 const container2Height = height / 2;
-const container3Height = height / 3.3;
+const container3Height = height / 3.5;
 function HomeScreen({ navigation }) {
+  const deviceLanguage = useDeviceLanguage();
+
   return (
     <>
       <View style={styles.content}>
         <DuaaContainer
-          style={[styles.duaaButton, { height: container3Height }]}
+          style={[
+            styles.duaaButton,
+            {
+              height: container3Height,
+            },
+          ]}
         />
 
         <Search
@@ -25,11 +33,23 @@ function HomeScreen({ navigation }) {
           editable={false}
           onPress={() => navigation.navigate("SearchScreen")}
         />
-        <View style={[styles.buttonContaıner, { height: container2Height }]}>
+        <View
+          style={[
+            styles.buttonContaıner,
+            {
+              height: container2Height,
+              flexDirection: deviceLanguage.startsWith("ar")
+                ? "row"
+                : "row-reverse",
+            },
+          ]}>
           <AppButton
             title="أسماء الله الحسني"
             onPress={() => navigation.navigate("NamesOfAllah")}
-            style={[styles.button, { height: container1Height }]}
+            style={[
+              styles.button,
+              { height: container1Height, paddingHorizontal: 27 },
+            ]}
           />
           <AppButton
             title="الاذكار"
@@ -37,14 +57,14 @@ function HomeScreen({ navigation }) {
             onPress={() => RootNavigation.navigate("AzkarScreen")}
           />
           <AppButton
-            title="السبحة"
-            style={[styles.button, { height: container1Height }]}
-            onPress={() => navigation.navigate("SibhaScreen")}
-          />
-          <AppButton
             title="الاربعون النووية"
             style={[styles.button, { height: container1Height }]}
             onPress={() => navigation.navigate("FortyNawawi")}
+          />
+          <AppButton
+            title="السبحة"
+            style={[styles.button, { height: container1Height }]}
+            onPress={() => navigation.navigate("SibhaScreen")}
           />
         </View>
       </View>

@@ -1,14 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import {
-  View,
-  StyleSheet,
-  Modal,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
 import useDatabase from "../hooks/useDatabase";
 import colors from "../config/colors";
 
@@ -25,13 +18,11 @@ function DuaaContainer({ style, handleOutside }) {
     // Update the current item index every hour
     const interval = setInterval(() => {
       setCurrentItemIndex((prevIndex) => (prevIndex + 1) % data.length);
-    }, 24 * 60 * 60 * 1000); //24 hours in milliseconds
-
-    // Clear the interval when the component unmounts
+    }, 24 * 60 * 60 * 1000);
     return () => clearInterval(interval);
   }, [data]);
 
-  const maxCharacters = 400; // Set your desired maximum number of characters
+  const maxCharacters = 350; // Set your desired maximum number of characters
 
   const firstCharacters =
     data[currentItemIndex]?.description?.slice(0, maxCharacters) || "";
@@ -123,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DuaaContainer;
+export default memo(DuaaContainer);

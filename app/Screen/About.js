@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import colors from "../config/colors";
 
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-export default About;
+export default memo(About);

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "salah",
+    "name": "Salah",
     "slug": "salah",
     "version": "1.0.0",
     "platforms": ["ios", "android"],
@@ -13,20 +13,29 @@
       "resizeMode": "cover",
       "backgroundColor": "#003399"
     },
+    "androidStatusBar": {
+      "hidden": true
+    },
+
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smoedesign.salah"
+      "bundleIdentifier": "com.smoedesign.salah",
+      "infoPlist": {
+        "UIFileSharingEnabled": true
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/logo.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "splash": {
+          "image": "./app/assets/splash.png",
+          "resizeMode": "cover",
+          "backgroundColor": "#003399"
+        }
       },
       "package": "com.smoedesign.salah"
-    },
-    "web": {
-      "favicon": "../app/assets/logo.png"
     },
     "notification": {
       "iosDisplayInForeground": true
@@ -35,9 +44,7 @@
       "eas": {
         "projectId": "11464412-8b33-4a2c-897e-929f3d2bf986"
       },
-      "bugsnag": {
-        "apiKey": "5d0998395ea413d22becc7b227a0d488"
-      }
+      "supportsRTL": true
     },
     "owner": "smoedesign",
     "hooks": {
@@ -53,6 +60,15 @@
         "expo-updates",
         {
           "username": "smoedesign"
+        }
+      ],
+      ["expo-localization"],
+      [
+        "expo-navigation-bar",
+        {
+          "position": "absolute",
+          "visibility": "hidden",
+          "behavior": "overlay-swipe"
         }
       ]
     ],

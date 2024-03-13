@@ -1,27 +1,24 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Text, StyleSheet, View, TextInput, Pressable } from "react-native";
 import colors from "../config/colors";
 import AppButton from "./AppButton";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
-function Search({ title, editable, onPress, inputText }) {
-  const [text, onChangeText] = useState([]);
+function Search({ title, onPress }) {
+  const deviceLanguage = useDeviceLanguage();
   return (
     <Pressable onPress={onPress}>
-      <View style={styles.container}>
-        <AppButton
-          style={styles.title}
-          
-          title={title}
-        />
-        <TextInput
-          inputMode="text"
-          textAlign="right"
-          editable={editable}
-          value={inputText}
-          style={styles.input}
-          onChangeText={onChangeText}
-          clearTextOnFocus
-        />
+      <View
+        style={[
+          styles.container,
+          {
+            flexDirection: deviceLanguage.startsWith("ar")
+              ? "row-reverse"
+              : "row",
+          },
+        ]}>
+        <AppButton style={styles.title} title={title} />
+        <TextInput style={styles.input} editable={false} />
       </View>
     </Pressable>
   );
@@ -32,8 +29,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     marginVertical: 20,
-    justifyContent: "flex-end",
     flexDirection: "row",
+    justifyContent: "flex-end",
     borderRadius: 4,
     overflow: "hidden",
     backgroundColor: colors.primary,
@@ -55,4 +52,4 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
 });
-export default Search;
+export default memo(Search);

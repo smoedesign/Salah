@@ -1,7 +1,7 @@
 import { View, Text, Alert, StyleSheet, Modal, Image } from "react-native";
 import colors from "../config/colors";
 import * as Clipboard from "expo-clipboard";
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, memo, useCallback } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppButton from "./AppButton";
 import * as Sharing from "expo-sharing";
@@ -17,21 +17,17 @@ import {
   renderers,
 } from "react-native-popup-menu";
 import AppText from "./AppText";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 const { Popover } = renderers;
 
-function ShareImage({
-  descriptin,
-  refrence,
-  shareComponent,
-  header,
-  font,
-  route,
-}) {
+function ShareImage({ descriptin, refrence, shareComponent, header, font }) {
   const [ImageVisable, setImageVisiable] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const deviceLanguage = useDeviceLanguage();
+
   const viewToSnapRef = useRef();
 
-  const share = async () => {
+  const share = useCallback(async () => {
     setImageVisiable(true);
     try {
       setTimeout(async () => {
@@ -43,9 +39,9 @@ function ShareImage({
     } catch (error) {
       console.log(error);
     }
-  };
+  });
 
-  const copy = async () => {
+  const copy = useCallback(async () => {
     const copiedText = descriptin + "\n" + refrence;
 
     await Clipboard.setStringAsync(copiedText);
@@ -58,8 +54,8 @@ function ShareImage({
       hideOnPress: true,
       delay: 0,
     });
-  };
-  const SaveImage = async () => {
+  });
+  const SaveImage = useCallback(async () => {
     const { granted } = await MediaLibrary.requestPermissionsAsync();
     if (!granted) {
       return Alert.alert(
@@ -88,7 +84,8 @@ function ShareImage({
         console.log(error);
       }
     }
-  };
+  });
+
   return (
     <>
       <Menu renderer={Popover} rendererProps={{ preferredPlacement: "bottom" }}>
@@ -98,7 +95,9 @@ function ShareImage({
               style={{
                 backgroundColor: colors.secoundery,
                 width: 100,
-                flexDirection: "row-reverse",
+                flexDirection: deviceLanguage.startsWith("ar")
+                  ? "row"
+                  : "row-reverse",
                 justifyContent: "space-between",
                 paddingVertical: 5,
                 paddingHorizontal: 10,
@@ -122,7 +121,14 @@ function ShareImage({
             />
           )}
         </MenuTrigger>
-        <MenuOptions style={styles.popupView}>
+        <MenuOptions
+          style={[
+            styles.popupView,
+            {
+              bottom: deviceLanguage.startsWith("ar") ? -30 : -30,
+              left: deviceLanguage.startsWith("ar") ? -150 : -20,
+            },
+          ]}>
           <MenuOption
             onSelect={() => setModalVisible(true)}
             style={[
@@ -135,7 +141,7 @@ function ShareImage({
               },
             ]}>
             <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
-              حفظ/مشاركة
+              {" حفظ/مشاركة"}
             </Text>
           </MenuOption>
           <MenuOption
@@ -161,9 +167,7 @@ function ShareImage({
           animationType="slide"
           transparent={true}
           visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
+          onRequestClose={() => setModalVisible(false)}>
           <View style={styles.modalView}>
             <MaterialCommunityIcons
               name="close-circle"
@@ -178,7 +182,15 @@ function ShareImage({
                 <Text style={[styles.textRefrenc, font]}>{refrence} </Text>
               )}
             </View>
-            <View style={styles.buttonContainer}>
+            <View
+              style={[
+                styles.buttonContainer,
+                {
+                  flexDirection: deviceLanguage.startsWith("ar")
+                    ? "row-reverse"
+                    : "row",
+                },
+              ]}>
               <AppButton onPress={share} title="مشاركة" style={styles.button} />
               <AppButton
                 onPress={SaveImage}
@@ -212,10 +224,33 @@ function ShareImage({
                 alignItems: "center",
                 flex: 1,
                 marginBottom: 40,
+                paddingHorizontal: 20,
               }}>
-              <Text style={[styles.textcontent, header]}>{descriptin} </Text>
+              <Text
+                style={[
+                  styles.textcontent,
+                  ,
+                  {
+                    textAlign: deviceLanguage.startsWith("ar")
+                      ? "center"
+                      : "center",
+                  },
+                ]}>
+                {descriptin}
+              </Text>
               {refrence && (
-                <Text style={[styles.textRefrenc, font]}>{refrence}</Text>
+                <Text
+                  style={[
+                    styles.textRefrenc,
+
+                    {
+                      textAlign: deviceLanguage.startsWith("ar")
+                        ? "center"
+                        : "center",
+                    },
+                  ]}>
+                  {refrence}
+                </Text>
               )}
             </View>
           </View>
@@ -241,17 +276,18 @@ const styles = StyleSheet.create({
   },
   textRefrenc: {
     fontSize: 13,
-    marginTop: 20,
+    marginTop: 40,
     color: colors.white,
+    textAlign: "center",
   },
   popupView: {
     backgroundColor: colors.white,
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 20,
-    bottom: -20,
+
     position: "absolute",
-    left: -20,
+
     elevation: 10,
   },
   icon: {
@@ -260,9 +296,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textcontent: {
-    fontSize: 15,
+    fontSize: 17,
     color: colors.white,
-    textAlign: "justify",
+    textAlign: "center",
   },
   content: {
     width: "100%",
@@ -312,4 +348,4 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
 });
-export default ShareImage;
+export default memo(ShareImage);

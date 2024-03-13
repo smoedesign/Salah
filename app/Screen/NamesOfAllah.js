@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  ImageBackground,
-  StatusBar,
-  Text,
-  Pressable,
-} from "react-native";
+import React, { memo, useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 
-import { FlatList } from "react-native";
 import ListItem from "../components/ListItems";
 import ShareImage from "../components/ShareImage";
 import { FlashList } from "@shopify/flash-list";
-import * as SQLite from "expo-sqlite";
 import useDatabase from "../hooks/useDatabase";
-
-const db = SQLite.openDatabase("salahApp.db");
 
 function NamesOfAllah() {
   const { data: names, request } = useDatabase();
@@ -46,7 +35,7 @@ function NamesOfAllah() {
                 alignItems: "center",
                 textAlign: "center",
               }}
-              header={{ fontSize: 20, fontWeight: "bold" }}
+              header={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
             />
           </View>
         </View>
@@ -81,4 +70,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
-export default NamesOfAllah;
+export default memo(NamesOfAllah);

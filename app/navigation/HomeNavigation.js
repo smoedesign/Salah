@@ -7,16 +7,29 @@ import AzkarNavigator from "./AzkarNavigator";
 import FortyNawawiNavigator from "./FortyNavigatior";
 import { Text, Pressable, AppState } from "react-native";
 import SearchNavigator from "./SearchNavigator";
-import * as SQLite from "expo-sqlite";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
 import navigation from "./RootNavigation";
-
-const db = SQLite.openDatabase("salahApp.db");
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
+import SibhaNavigator from "./SibhaNavigator";
+import * as NavigationBar from "expo-navigation-bar";
+import { setStatusBarHidden } from "expo-status-bar";
 
 const Stack = createNativeStackNavigator();
+// Function to set NavigationBar and status bar configurations based on the visibility of the model
+const setNavigationAndStatusBarConfig = () => {
+  // Configuration for the rest of the app when the model is not visible
+  NavigationBar.setPositionAsync("absolute");
+  NavigationBar.setVisibilityAsync("hidden");
+  NavigationBar.setBehaviorAsync("overlay-swipe");
+  NavigationBar.setBackgroundColorAsync("#00000080");
+  setStatusBarHidden(true, "none");
+};
+// Configuration for the rest of the app when the model is not visible
 
 const HomeNavigator = () => {
+  const deviceLanguage = useDeviceLanguage();
+
   const notificationListener = useRef(null);
   const responseListener = useRef(null);
   const createNotificationChannel = async () => {
@@ -28,7 +41,7 @@ const HomeNavigator = () => {
     });
   };
 
-  const scheduleLocalNotification = async () => {
+  const scheduleLocalNotification = useCallback(async () => {
     const trigger = new Date(Date.now() + 60 * 60 * 1000); // add 1 hour to the current time
     trigger.setHours(6); // set the hour to 6
     trigger.setMinutes(0); // set the minutes to 0
@@ -112,10 +125,11 @@ const HomeNavigator = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  });
   useEffect(() => {
     scheduleLocalNotification();
     createNotificationChannel();
+    setNavigationAndStatusBarConfig();
   }, []);
   useEffect(() => {
     const handleNotification = () => {
@@ -174,7 +188,9 @@ const HomeNavigator = () => {
             <Pressable
               style={{
                 display: "flex",
-                flexDirection: "row-reverse",
+                flexDirection: deviceLanguage.startsWith("ar")
+                  ? "row"
+                  : "row-reverse",
                 marginRight: 20,
               }}
               onPress={() => {
@@ -186,7 +202,6 @@ const HomeNavigator = () => {
           ),
           headerBackTitleVisible: false,
           headerBackVisible: false,
-          navigationBarHidden: true,
         })}
       />
 
@@ -215,27 +230,10 @@ const HomeNavigator = () => {
       />
       <Stack.Screen
         name="SibhaScreen"
-        component={SibhaScreen}
-        options={({ navigation }) => ({
-          title: "",
-          headerRight: () => (
-            <Pressable
-              style={{
-                display: "flex",
-                flexDirection: "row-reverse",
-                marginRight: 20,
-              }}
-              onPress={() => {
-                navigation.goBack();
-              }}>
-              <AntDesign name="right" size={24} color="black" />
-              <Text style={{ fontSize: 20, fontWeight: 600 }}>{"السبحة"}</Text>
-            </Pressable>
-          ),
-          headerBackTitleVisible: false,
-          headerBackVisible: false,
-          navigationBarHidden: true,
-        })}
+        component={SibhaNavigator}
+        options={{
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

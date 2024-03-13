@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
@@ -6,8 +6,11 @@ import Screen from "../components/Screen";
 import AppButton from "../components/AppButton";
 import colors from "../config/colors";
 import useDatabase from "../hooks/useDatabase";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
 function AzkarScreen({ navigation }) {
+  const deviceLanguage = useDeviceLanguage();
+
   const [text, setChangeText] = useState("");
   const { data: hisalmuslimData, request } = useDatabase();
 
@@ -27,7 +30,14 @@ function AzkarScreen({ navigation }) {
         <AppButton
           key={item._id}
           title={name}
-          style={styles.azkarContainer}
+          style={[
+            styles.azkarContainer,
+            {
+              alignItems: deviceLanguage.startsWith("ar")
+                ? "flex-start"
+                : "flex-end",
+            },
+          ]}
           onPress={() => {
             navigation.navigate("AzkarDetailsScreen", { azkar: item });
           }}
@@ -44,7 +54,14 @@ function AzkarScreen({ navigation }) {
         <AppButton
           key={item._id}
           title={name}
-          style={styles.azkarContainer}
+          style={[
+            styles.azkarContainer,
+            {
+              alignItems: deviceLanguage.startsWith("ar")
+                ? "flex-start"
+                : "flex-end",
+            },
+          ]}
           onPress={() => {
             navigation.navigate("AzkarDetailsScreen", { azkar: item });
           }}
@@ -55,7 +72,15 @@ function AzkarScreen({ navigation }) {
 
   return (
     <Screen style={styles.container}>
-      <View style={styles.searchContainer}>
+      <View
+        style={[
+          styles.searchContainer,
+          {
+            flexDirection: deviceLanguage.startsWith("ar")
+              ? "row"
+              : "row-reverse",
+          },
+        ]}>
         <TextInput
           inputMode="text"
           textAlign="right"
@@ -88,8 +113,8 @@ const styles = StyleSheet.create({
   azkarContainer: {
     height: 55,
     marginBottom: 10,
-    alignItems: "flex-end",
-    paddingRight: 20,
+
+    paddingHorizontal: 20,
     backgroundColor: colors.primary,
   },
 
@@ -128,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AzkarScreen;
+export default memo(AzkarScreen);

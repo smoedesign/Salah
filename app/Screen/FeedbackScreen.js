@@ -1,5 +1,5 @@
-import React from "react";
-import { View, StyleSheet, TextInput, Keyboard } from "react-native";
+import React, { memo, useState } from "react";
+import { View, StyleSheet, Keyboard, Alert } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -16,15 +16,26 @@ const validationSchema = Yup.object().shape({
 });
 
 function FeedbackScreens() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   return (
     <View style={styles.container}>
       <Formik
         style={styles.form}
         initialValues={{ email: "", userName: "", messages: "" }}
         onSubmit={async (values, { resetForm }) => {
-          Keyboard.dismiss();
-          const result = await sendEmail(values);
-          resetForm();
+          if (!isSubmitting) {
+            setIsSubmitting(true);
+            Keyboard.dismiss();
+            try {
+              const result = await sendEmail(values);
+              resetForm();
+              if (result === true) Alert.alert("لقد تم الارسال بنجاح");
+            } catch (error) {
+              Alert.alert("هنالك مشكلة الرجاء المحاولة مرة أخري");
+            }
+            setIsSubmitting(false);
+          }
         }}
         validationSchema={validationSchema}>
         {({
@@ -102,4 +113,4 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
 });
-export default FeedbackScreens;
+export default memo(FeedbackScreens);

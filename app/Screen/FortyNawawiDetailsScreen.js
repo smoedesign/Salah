@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { View, StyleSheet } from "react-native";
 import ListItem from "../components/ListItems";
 import ShareImage from "../components/ShareImage";
@@ -7,8 +7,11 @@ import colors from "../config/colors";
 import { ImageBackground } from "react-native";
 import Toast from "react-native-root-toast";
 import useDatabase from "../hooks/useDatabase";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
 function FortyNawawiDetailsScreen({ route, navigation }) {
+  const deviceLanguage = useDeviceLanguage();
+
   const forty = route.params;
 
   const { data: nextItem, request } = useDatabase("fortyNawawia");
@@ -26,11 +29,24 @@ function FortyNawawiDetailsScreen({ route, navigation }) {
           <ListItem
             descriptin={forty.description}
             refrence={forty.reference}
-            fonts={{ fontSize: 14, marginBottom: 10 }}
-            headers={{ fontSize: 18, fontWeight: "500", paddingVertical: 15 }}
+            fonts={{ fontSize: 14, marginBottom: 10, textAlign: "center" }}
+            headers={{
+              fontSize: 18,
+              fontWeight: "500",
+              paddingVertical: 15,
+              textAlign: "center",
+            }}
           />
         </View>
-        <View style={styles.buttonContainer}>
+        <View
+          style={[
+            styles.buttonContainer,
+            {
+              flexDirection: deviceLanguage.startsWith("ar")
+                ? "row"
+                : "row-reverse",
+            },
+          ]}>
           <AppButton
             onPress={() => {
               const previousHadith = nextItem.find(
@@ -100,7 +116,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     justifyContent: "space-between",
-    flexDirection: "row-reverse",
     alignItems: "center",
     width: "100%",
     display: "flex",
@@ -116,4 +131,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-export default FortyNawawiDetailsScreen;
+export default memo(FortyNawawiDetailsScreen);

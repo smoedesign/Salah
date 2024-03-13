@@ -21,21 +21,23 @@
     "@shopify/flash-list": "1.6.3",
     "apisauce": "^3.0.1",
     "axios": "^1.6.2",
-    "expo": "^50.0.8",
+    "expo": "~50.0.11",
+    "expo-asset": "~9.0.2",
     "expo-av": "~13.10.5",
     "expo-clipboard": "~5.0.1",
-    "expo-constants": "~15.4.5",
     "expo-crypto": "~12.8.1",
     "expo-dev-client": "~3.3.9",
     "expo-device": "~5.9.3",
     "expo-doctor": "^1.1.2",
+    "expo-file-system": "~16.0.8",
     "expo-linking": "~6.2.2",
+    "expo-localization": "~14.8.3",
     "expo-media-library": "~15.9.1",
     "expo-navigation-bar": "~2.8.1",
     "expo-notifications": "~0.27.6",
     "expo-sharing": "~11.10.0",
     "expo-splash-screen": "~0.26.4",
-    "expo-sqlite": "~13.2.2",
+    "expo-sqlite": "~13.3.0",
     "expo-system-ui": "^2.9.3",
     "expo-updates": "~0.24.11",
     "formik": "^2.2.9",
@@ -45,6 +47,7 @@
     "react": "18.2.0",
     "react-native": "0.73.4",
     "react-native-gesture-handler": "~2.14.0",
+    "react-native-immersive": "^2.0.0",
     "react-native-pager-view": "6.2.3",
     "react-native-popup-menu": "^0.16.1",
     "react-native-reanimated": "~3.6.2",
@@ -56,13 +59,18 @@
     "react-native-view-shot": "3.8.0",
     "react-native-webview": "13.6.4",
     "typescript": "^5.3.3",
-    "yup": "^1.1.1"
+    "yup": "^1.1.1",
+    "expo-status-bar": "~1.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@types/react": "~18.2.14",
     "sharp-cli": "^4.2.0"
+  },
+  "resolutions": {
+    "expo-modules-core": "1.2.4",
+    "@expo/config-plugins": "5.0.4"
   },
   "private": true
 }

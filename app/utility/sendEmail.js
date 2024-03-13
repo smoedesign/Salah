@@ -12,10 +12,5 @@ const subject = "New Message from salah App";
 export const sendEmail = async (emailParams) => {
   const msg = `email: ${emailParams.email}\nname: ${emailParams.userName}\ntext: ${emailParams.messages}`;
 
-  try {
-    const response = await sendGridEmail(apiKey, to, from, subject, msg);
-    if (response === true) Alert.alert("لقد تم الارسال بنجاح");
-  } catch (error) {
-    Alert.alert("هنالك مشكلة الرجاء المحاولة مرة أخري");
-  }
+  await sendGridEmail(apiKey, to, from, subject, msg);
 };

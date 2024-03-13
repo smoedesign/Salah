@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, memo } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import colors from "../config/colors";
@@ -63,4 +63,4 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
 });
-export default FortyNawawi;
+export default memo(FortyNawawi);

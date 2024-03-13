@@ -1,11 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, memo } from "react";
 import { View, StyleSheet, Pressable, TextInput } from "react-native";
 import AppText from "../components/AppText";
 import AppPicker from "../components/AppPicker";
 import colors from "../config/colors";
 import Toast from "react-native-root-toast";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
 function SibhaScreen(props) {
+  const deviceLanguage = useDeviceLanguage();
+
   const azkar = [
     { label: "سبحان الله", id: 1 },
     { label: "الحمد الله", id: 2 },
@@ -81,7 +84,15 @@ function SibhaScreen(props) {
             </AppText>
           </View>
 
-          <View style={styles.footer}>
+          <View
+            style={[
+              styles.footer,
+              {
+                flexDirection: deviceLanguage.startsWith("ar")
+                  ? "row-reverse"
+                  : "row",
+              },
+            ]}>
             <Pressable onPress={handleReset}>
               <AppText
                 style={{
@@ -96,7 +107,15 @@ function SibhaScreen(props) {
               <View style={styles.counter} />
             </Pressable>
 
-            <View style={styles.countInput}>
+            <View
+              style={[
+                styles.countInput,
+                {
+                  flexDirection: deviceLanguage.startsWith("ar")
+                    ? "row"
+                    : "row-reverse",
+                },
+              ]}>
               <AppText style={{ color: colors.secoundery, fontWeight: "700" }}>
                 {"العدد:"}
               </AppText>
@@ -140,7 +159,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   countInput: {
-    flexDirection: "row-reverse",
     width: 60,
   },
   container: {
@@ -195,11 +213,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer: {
-    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
     alignSelf: "flex-end",
   },
 });
-export default SibhaScreen;
+export default memo(SibhaScreen);

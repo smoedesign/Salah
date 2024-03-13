@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,memo } from "react";
 import { Text, StyleSheet, Pressable } from "react-native";
-import AppButton from "./AppButton";
 import colors from "../config/colors";
 
 function Counter({ number, style }) {
@@ -31,4 +30,4 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
 });
-export default Counter;
+export default memo(Counter);

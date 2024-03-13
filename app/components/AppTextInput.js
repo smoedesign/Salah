@@ -1,12 +1,23 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Keyboard } from "react-native";
+import React, { memo } from "react";
+import { View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import colors from "../config/colors";
+import useDeviceLanguage from "../hooks/useDeviceLanguge";
 
 function AppTextInput({ icon, style, ...otherProps }) {
+  const deviceLanguage = useDeviceLanguage();
   return (
-    <View style={[styles.container, style]}>
+    <View
+      style={[
+        styles.container,
+        style,
+        {
+          flexDirection: deviceLanguage.startsWith("ar")
+            ? "row"
+            : "row-reverse",
+        },
+      ]}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
@@ -29,7 +40,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
     borderRadius: 5,
-    flexDirection: "row-reverse",
     width: "95%",
     padding: 15,
     height: 70,
@@ -47,4 +57,4 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
-export default AppTextInput;
+export default memo(AppTextInput);
