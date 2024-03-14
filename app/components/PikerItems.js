@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import colors from "../config/colors";
 import AppText from "./AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,7 +10,7 @@ function PikerItems({ label, onPress }) {
 
   return (
     <>
-      <TouchableOpacity
+      <Pressable
         style={[
           styles.container,
           {
@@ -22,7 +22,7 @@ function PikerItems({ label, onPress }) {
         onPress={onPress}>
         <AppText style={styles.text}>{label} </AppText>
         <MaterialCommunityIcons color={colors.white} size={25} name="circle" />
-      </TouchableOpacity>
+      </Pressable>
     </>
   );
 }

@@ -34,7 +34,8 @@ function ListItem({ descriptin, refrence, times, number, headers, fonts }) {
             <ShareImage
               descriptin={descriptin}
               refrence={refrence}
-              header={{ fontSize: 18 }}
+              header={headers}
+              font={fonts}
             />
           </View>
         )}
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
   times: {
     fontSize: 15,
     color: colors.white,
+    fontWeight: "bold",
   },
   sperator: {
     backgroundColor: colors.secoundery,

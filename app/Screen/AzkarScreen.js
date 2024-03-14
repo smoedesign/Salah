@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useCallback } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 
@@ -11,93 +11,60 @@ import useDeviceLanguage from "../hooks/useDeviceLanguge";
 function AzkarScreen({ navigation }) {
   const deviceLanguage = useDeviceLanguage();
 
-  const [text, setChangeText] = useState("");
+  const [text, setText] = useState("");
   const { data: hisalmuslimData, request } = useDatabase();
 
   useEffect(() => {
     request("hisnAlmuslim");
   }, []);
 
-  const filterData = (item) => {
+  const filterData = useCallback(() => {
     const b = "\u0627"; //ا
     const c = "\u0623"; //أ
 
-    const Searchitem = text;
-    const name = item.name.includes(c) ? item.name.replace(c, b) : item.name;
-
-    if (Searchitem == "") {
-      return (
-        <AppButton
-          key={item._id}
-          title={name}
-          style={[
-            styles.azkarContainer,
-            {
-              alignItems: deviceLanguage.startsWith("ar")
-                ? "flex-start"
-                : "flex-end",
-            },
-          ]}
-          onPress={() => {
-            navigation.navigate("AzkarDetailsScreen", { azkar: item });
-          }}
-        />
-      );
-    }
-
-    if (
-      name.includes(
-        Searchitem.includes(c) ? Searchitem.replace(c, b) : Searchitem
-      )
-    ) {
-      return (
-        <AppButton
-          key={item._id}
-          title={name}
-          style={[
-            styles.azkarContainer,
-            {
-              alignItems: deviceLanguage.startsWith("ar")
-                ? "flex-start"
-                : "flex-end",
-            },
-          ]}
-          onPress={() => {
-            navigation.navigate("AzkarDetailsScreen", { azkar: item });
-          }}
-        />
-      );
-    }
-  };
+    return hisalmuslimData.filter((item) => {
+      const name = item.name.includes(c) ? item.name.replace(c, b) : item.name;
+      const searchItem = text.includes(c) ? text.replace(c, b) : text;
+      return name.includes(searchItem);
+    });
+  }, [hisalmuslimData, text]);
 
   return (
     <Screen style={styles.container}>
-      <View
-        style={[
-          styles.searchContainer,
-          {
-            flexDirection: deviceLanguage.startsWith("ar")
-              ? "row"
-              : "row-reverse",
-          },
-        ]}>
+      <View style={styles.searchContainer}>
         <TextInput
           inputMode="text"
           textAlign="right"
           editable
           value={text}
           style={styles.input}
-          onChangeText={(text) => setChangeText(text)}
+          onChangeText={setText}
           clearTextOnFocus
           keyboardType="default"
         />
-        <AppButton style={styles.title} title={"ابحث"} />
+        <AppButton style={styles.title} title={"البحث"} />
       </View>
 
       <FlashList
-        data={hisalmuslimData}
+        data={filterData()}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => filterData(item)}
+        renderItem={({ item }) => (
+          <AppButton
+            key={item._id}
+            title={item.name}
+            style={[
+              styles.azkarContainer,
+              {
+                alignItems: deviceLanguage.startsWith("ar")
+                  ? "flex-start"
+                  : "flex-end",
+              },
+            ]}
+            onPress={() => {
+              navigation.navigate("AzkarDetailsScreen", { azkar: item });
+            }}
+          />
+        )}
         estimatedItemSize={200}
       />
     </Screen>
@@ -113,27 +80,19 @@ const styles = StyleSheet.create({
   azkarContainer: {
     height: 55,
     marginBottom: 10,
-
     paddingHorizontal: 20,
     backgroundColor: colors.primary,
   },
-
-  morningContainer: {
-    marginBottom: 25,
-  },
   searchContainer: {
-    width: "100%",
+    flexDirection: "row-reverse",
     height: 60,
     marginBottom: 25,
     justifyContent: "flex-end",
-    flexDirection: "row-reverse",
     borderRadius: 4,
     overflow: "hidden",
     backgroundColor: colors.primary,
-    writingDirection: "rtl",
   },
   input: {
-    backgroundColor: colors.primary,
     flexGrow: 1,
     height: "100%",
     paddingHorizontal: 15,

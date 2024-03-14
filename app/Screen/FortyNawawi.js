@@ -1,5 +1,5 @@
 import React, { useEffect, memo } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import colors from "../config/colors";
 import AppText from "../components/AppText";
@@ -20,14 +20,14 @@ function FortyNawawi({ navigation }) {
         data={forty}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <TouchableOpacity
+          <Pressable
             style={styles.item}
             onPress={() => {
               navigation.navigate("FortyNawawiDetailsScreen", item);
             }}>
             <AppText style={styles.label}>{item.numbersofhadith}</AppText>
             <AppText style={styles.name}>{item.nameofhadith}</AppText>
-          </TouchableOpacity>
+          </Pressable>
         )}
         estimatedItemSize={200}
       />

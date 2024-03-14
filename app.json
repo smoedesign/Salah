@@ -3,6 +3,7 @@
     "name": "Salah",
     "slug": "salah",
     "version": "1.0.0",
+    "backgroundColor": "#003399",
     "platforms": ["ios", "android"],
     "orientation": "portrait",
     "icon": "./app/assets/logo.png",
@@ -16,6 +17,7 @@
     "androidStatusBar": {
       "hidden": true
     },
+    "permissions": ["NOTIFICATIONS"],
 
     "assetBundlePatterns": ["**/*"],
     "ios": {

@@ -1,7 +1,13 @@
 import React, { useEffect, useState, memo } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { View, StyleSheet, Modal, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Modal,
+  Text,
+  Pressable,
+} from "react-native";
 import useDatabase from "../hooks/useDatabase";
 import colors from "../config/colors";
 
@@ -60,7 +66,7 @@ function DuaaContainer({ style, handleOutside }) {
             setModalVisible(!modalVisible);
           }}>
           <View style={styles.modalView}>
-            <TouchableOpacity
+            <Pressable
               onPress={() => setModalVisible(false)}
               style={styles.icon}>
               <MaterialCommunityIcons
@@ -68,7 +74,7 @@ function DuaaContainer({ style, handleOutside }) {
                 color={colors.primary}
                 size={35}
               />
-            </TouchableOpacity>
+            </Pressable>
             <View style={styles.textContainer}>
               <Text style={styles.text}>
                 {data[currentItemIndex]?.description}

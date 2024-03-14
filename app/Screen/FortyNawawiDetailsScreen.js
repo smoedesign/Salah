@@ -29,9 +29,15 @@ function FortyNawawiDetailsScreen({ route, navigation }) {
           <ListItem
             descriptin={forty.description}
             refrence={forty.reference}
-            fonts={{ fontSize: 14, marginBottom: 10, textAlign: "center" }}
+            fonts={{
+              textAlign: "center",
+              fontSize: 12,
+              marginVertical: 13,
+              color: "#708090",
+              paddingHorizontal: 20,
+            }}
             headers={{
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: "500",
               paddingVertical: 15,
               textAlign: "center",
@@ -68,6 +74,19 @@ function FortyNawawiDetailsScreen({ route, navigation }) {
             shareComponent={"مشاركة"}
             descriptin={forty.description}
             refrence={forty.reference}
+            font={{
+              textAlign: "center",
+              fontSize: 12,
+              marginTop: 25,
+              color: "#708090",
+              paddingHorizontal: 15,
+            }}
+            header={{
+              fontSize: 18,
+              fontWeight: "500",
+              paddingVertical: 15,
+              textAlign: "center",
+            }}
           />
 
           <AppButton

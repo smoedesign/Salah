@@ -1,12 +1,5 @@
 import React, { useState, memo } from "react";
-import {
-  View,
-  StyleSheet,
-  Modal,
-  TouchableWithoutFeedback,
-  Pressable,
-  FlatList,
-} from "react-native";
+import { View, StyleSheet, Modal, Pressable, FlatList } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 import AppText from "./AppText";
@@ -19,7 +12,7 @@ function AppPicker({ icon, items, placeholder, SelectedZiker, onSelectZiker }) {
 
   return (
     <>
-      <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
+      <Pressable onPress={() => setModalVisible(true)}>
         <View
           style={[
             styles.container,
@@ -47,7 +40,7 @@ function AppPicker({ icon, items, placeholder, SelectedZiker, onSelectZiker }) {
             color={colors.white}
           />
         </View>
-      </TouchableWithoutFeedback>
+      </Pressable>
 
       {modalVisiable && (
         <Modal

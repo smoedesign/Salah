@@ -18,11 +18,11 @@ function NamesOfAllah() {
       keyExtractor={(item) => item._id}
       data={names}
       renderItem={({ item }) => (
-        <View>
+        <View style={styles.container}>
           <ListItem
             descriptin={item.name}
             refrence={item.description}
-            fonts={{ fontSize: 18 }}
+            fonts={{ fontSize: 20 }}
             headers={styles.header}
           />
           <View style={styles.separator}>
@@ -31,9 +31,10 @@ function NamesOfAllah() {
               refrence={item.description}
               shareComponent="مشاركة"
               font={{
-                fontSize: 18,
+                fontSize: 19,
                 alignItems: "center",
                 textAlign: "center",
+                marginTop: 20,
               }}
               header={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
             />
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
-    marginBottom: 20,
   },
 
   separator: {

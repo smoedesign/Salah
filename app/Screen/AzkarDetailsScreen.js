@@ -34,11 +34,17 @@ function AzkarDetailsScreen({ route }) {
             times={item.countnumber}
             headers={{
               paddingVertical: 25,
-              fontSize: 19,
+              fontSize: 20,
               fontWeight: 500,
               textAlign: "center",
             }}
-            fonts={{ textAlign: "center" }}
+            fonts={{
+              textAlign: "center",
+              fontSize: 12,
+              marginBottom: 13,
+              color: "#708090",
+              paddingHorizontal: 40,
+            }}
           />
         )}
         estimatedItemSize={400}

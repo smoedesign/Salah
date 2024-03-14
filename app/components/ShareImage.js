@@ -88,7 +88,7 @@ function ShareImage({ descriptin, refrence, shareComponent, header, font }) {
 
   return (
     <>
-      <Menu renderer={Popover} rendererProps={{ preferredPlacement: "bottom" }}>
+      <Menu renderer={Popover} rendererProps={{ preferredPlacement: "top" }}>
         <MenuTrigger>
           {shareComponent && (
             <View
@@ -121,14 +121,13 @@ function ShareImage({ descriptin, refrence, shareComponent, header, font }) {
             />
           )}
         </MenuTrigger>
+        {}
         <MenuOptions
-          style={[
-            styles.popupView,
-            {
-              bottom: deviceLanguage.startsWith("ar") ? -30 : -30,
-              left: deviceLanguage.startsWith("ar") ? -150 : -20,
-            },
-          ]}>
+          style={
+            deviceLanguage.startsWith("ar")
+              ? styles.popupViewArabik
+              : styles.popupView
+          }>
           <MenuOption
             onSelect={() => setModalVisible(true)}
             style={[
@@ -223,13 +222,13 @@ function ShareImage({ descriptin, refrence, shareComponent, header, font }) {
                 justifyContent: "center",
                 alignItems: "center",
                 flex: 1,
-                marginBottom: 40,
-                paddingHorizontal: 20,
+                marginBottom: 20,
+                paddingHorizontal: 10,
               }}>
               <Text
                 style={[
                   styles.textcontent,
-                  ,
+                  header,
                   {
                     textAlign: deviceLanguage.startsWith("ar")
                       ? "center"
@@ -242,7 +241,7 @@ function ShareImage({ descriptin, refrence, shareComponent, header, font }) {
                 <Text
                   style={[
                     styles.textRefrenc,
-
+                    font,
                     {
                       textAlign: deviceLanguage.startsWith("ar")
                         ? "center"
@@ -275,17 +274,26 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
   textRefrenc: {
-    fontSize: 13,
-    marginTop: 40,
     color: colors.white,
     textAlign: "center",
+  },
+  popupViewArabik: {
+    backgroundColor: colors.white,
+    justifyContent: "space-between",
+    padding: 20,
+    borderRadius: 20,
+    top: -40,
+    right: -10,
+    position: "absolute",
+    elevation: 10,
   },
   popupView: {
     backgroundColor: colors.white,
     justifyContent: "space-between",
     padding: 20,
     borderRadius: 20,
-
+    top: -40,
+    left: -20,
     position: "absolute",
 
     elevation: 10,
@@ -296,7 +304,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textcontent: {
-    fontSize: 17,
     color: colors.white,
     textAlign: "center",
   },
